@@ -1,9 +1,18 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>Rimedi Ancestrali</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet">
 <style>
+  html{color-scheme: light;}
+  body{margin:0;}
   :root{
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
     --bg:#F8F5EE;
     --surface:#FFFFFF;
     --surface-alt:#FBF0D9;
@@ -411,6 +420,8 @@
     .hero{padding:20px 18px;}
   }
 </style>
+</head>
+<body>
 
 <div class="app">
   <header class="topbar">
@@ -1420,3 +1431,5 @@
   openHome();
 })();
 </script>
+</body>
+</html>
