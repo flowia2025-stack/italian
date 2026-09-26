@@ -1,0 +1,1422 @@
+<title>Rimedi Ancestrali</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F8F5EE;
+    --surface:#FFFFFF;
+    --surface-alt:#FBF0D9;
+    --border:#E5DFC9;
+    --border-strong:#D9CFA9;
+    --forest-900:#081F13;
+    --forest-800:#0B2416;
+    --forest-700:#143E2B;
+    --forest-600:#1C4A33;
+    --text:#111A14;
+    --text-muted:#4F5951;
+    --gold:#C58814;
+    --gold-deep:#9C6C0F;
+    --gold-light:#E8B435;
+    --success:#1C7430;
+    --success-bg:#DCFCE7;
+    --danger:#C62828;
+    --shadow: 0 1px 2px rgba(8,31,19,.06), 0 8px 24px -12px rgba(8,31,19,.18);
+    --scrim: rgba(8,20,13,.55);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0B2416;
+      --surface:#12301F;
+      --surface-alt:#1B3B26;
+      --border:#26472F;
+      --border-strong:#345940;
+      --text:#F3EFE3;
+      --text-muted:#B7C9AE;
+      --gold:#E8B435;
+      --gold-deep:#D49A24;
+      --gold-light:#F0C363;
+      --success:#4ADE80;
+      --success-bg:#173A24;
+      --danger:#F27171;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -12px rgba(0,0,0,.5);
+      --scrim: rgba(2,8,5,.68);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0B2416;
+    --surface:#12301F;
+    --surface-alt:#1B3B26;
+    --border:#26472F;
+    --border-strong:#345940;
+    --text:#F3EFE3;
+    --text-muted:#B7C9AE;
+    --gold:#E8B435;
+    --gold-deep:#D49A24;
+    --gold-light:#F0C363;
+    --success:#4ADE80;
+    --success-bg:#173A24;
+    --danger:#F27171;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -12px rgba(0,0,0,.5);
+    --scrim: rgba(2,8,5,.68);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',ui-sans-serif,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.brand-word,.nav-label{font-family:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;}
+  .recipe-title{font-family:'Fraunces',ui-serif,Georgia,serif;}
+  h1,h2,h3{text-wrap:balance; margin:0;}
+  button{font-family:inherit;}
+  a{color:inherit;}
+  img{max-width:100%;}
+  .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+  /* ---------- shell layout ---------- */
+  .app{max-width:1400px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;}
+
+  .topbar{
+    position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+    display:flex;align-items:center;gap:12px;
+    padding:12px 16px;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .hamburger{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:40px;height:40px;border-radius:10px;border:1px solid var(--border-strong);
+    background:var(--surface);color:var(--text);cursor:pointer;flex:none;
+  }
+  .hamburger:hover{border-color:var(--gold);}
+  .hamburger svg{width:20px;height:20px;}
+  .topbar-brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.01em;font-size:1.05rem;white-space:nowrap;}
+  .topbar-brand .mark{width:26px;height:26px;color:var(--gold);flex:none;}
+  .topbar-search{
+    position:relative;flex:1;min-width:0;max-width:420px;margin-left:auto;
+  }
+  .topbar-search input{
+    width:100%;height:40px;border-radius:10px;border:1px solid var(--border-strong);
+    background:var(--surface);color:var(--text);padding:0 14px 0 38px;font-size:.9rem;
+  }
+  .topbar-search input:focus{outline:2px solid var(--gold);outline-offset:1px;}
+  .topbar-search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--text-muted);pointer-events:none;}
+  .search-panel{
+    position:absolute;top:calc(100% + 6px);left:0;right:0;
+    background:var(--surface);border:1px solid var(--border-strong);border-radius:12px;
+    box-shadow:var(--shadow);max-height:60vh;overflow:auto;z-index:50;
+  }
+  .search-panel button{
+    display:flex;width:100%;flex-direction:column;align-items:flex-start;gap:2px;
+    padding:10px 14px;background:none;border:none;border-bottom:1px solid var(--border);
+    text-align:left;cursor:pointer;color:var(--text);
+  }
+  .search-panel button:last-child{border-bottom:none;}
+  .search-panel button:hover{background:var(--surface-alt);}
+  .search-panel .r-title{font-weight:600;font-size:.88rem;}
+  .search-panel .r-cat{font-size:.76rem;color:var(--text-muted);}
+  .search-empty{padding:14px;font-size:.85rem;color:var(--text-muted);}
+
+  .shell{display:flex;flex:1;min-height:0;}
+
+  .sidebar{
+    width:260px;flex:none;
+    background:var(--forest-800);color:#F3EFE3;
+    display:flex;flex-direction:column;gap:4px;
+    padding:18px 14px calc(18px + env(safe-area-inset-bottom,0px));
+  }
+  .sidebar-brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px;}
+  .sidebar-brand .mark{width:30px;height:30px;color:var(--gold-light);flex:none;}
+  .sidebar-brand .word{font-weight:800;font-size:1.1rem;line-height:1.1;}
+  .sidebar-brand .sub{font-size:.72rem;color:#B7C9AE;letter-spacing:.06em;text-transform:uppercase;}
+  .nav-group-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:#8FA593;padding:14px 10px 6px;}
+  .nav-item{
+    display:flex;align-items:center;gap:10px;
+    padding:9px 10px;border-radius:9px;border:none;background:none;
+    color:#E7F0E9;font-size:.88rem;font-weight:500;text-align:left;cursor:pointer;width:100%;
+  }
+  .nav-item .num{
+    flex:none;width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.08);
+    display:flex;align-items:center;justify-content:center;font-size:.66rem;font-weight:700;color:#B7C9AE;font-family:'Plus Jakarta Sans',sans-serif;
+  }
+  .nav-item svg{width:18px;height:18px;flex:none;color:#B7C9AE;}
+  .nav-item:hover{background:rgba(255,255,255,.06);}
+  .nav-item.active{background:rgba(232,180,53,.14);color:#FBF0D9;}
+  .nav-item.active svg,.nav-item.active .num{color:var(--gold-light);}
+  .nav-item .count{margin-left:auto;font-size:.72rem;color:#8FA593;}
+
+  .scrim{position:fixed;inset:0;background:var(--scrim);z-index:45;display:none;}
+  .scrim.open{display:block;}
+
+  main.content{flex:1;min-width:0;padding:22px 22px 48px;}
+
+  /* ---------- home view ---------- */
+  .hero{
+    background:linear-gradient(135deg, var(--forest-700), var(--forest-800));
+    color:#F3EFE3;border-radius:18px;padding:26px 24px;
+    display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;
+    margin-bottom:26px;
+  }
+  .hero h1{font-size:clamp(1.3rem,2.4vw,1.7rem);font-weight:800;}
+  .hero p{margin:8px 0 0;color:#CBDBCF;font-size:.92rem;max-width:46ch;}
+  .hero-plain{padding:22px 24px;}
+  .hero-plain h1{font-weight:700;}
+  .hero-plain p{font-weight:300;}
+
+  .section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 14px;}
+  .section-heading h2{font-size:1.05rem;font-weight:800;}
+  .section-heading span{font-size:.8rem;color:var(--text-muted);}
+
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-bottom:32px;}
+  .cat-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:14px;
+    padding:16px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:10px;
+    box-shadow:var(--shadow);transition:transform .12s ease, border-color .12s ease;
+  }
+  .cat-card:hover{transform:translateY(-2px);border-color:var(--gold);}
+  .cat-card .top-row{display:flex;align-items:flex-start;justify-content:space-between;}
+  .cat-icon{
+    width:42px;height:42px;border-radius:10px;background:var(--surface-alt);
+    display:flex;align-items:center;justify-content:center;color:var(--gold-deep);flex:none;
+  }
+  .cat-icon svg{width:22px;height:22px;}
+  .cat-num{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.72rem;color:var(--border-strong);}
+  .cat-card h3{font-size:.98rem;line-height:1.3;}
+  .cat-card p{margin:0;font-size:.82rem;color:var(--text-muted);line-height:1.45;}
+  .cat-card .count-row{font-size:.76rem;color:var(--gold-deep);font-weight:600;margin-top:auto;}
+
+  .bonus-band{
+    background:var(--surface-alt);border:1px solid var(--border-strong);border-radius:18px;
+    padding:20px;margin-bottom:10px;
+  }
+  .bonus-band .section-heading h2{color:var(--gold-deep);}
+  .bonus-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;}
+  .bonus-card{
+    background:var(--surface);border:1px solid var(--border-strong);border-radius:12px;padding:14px;
+    display:flex;gap:12px;align-items:flex-start;cursor:pointer;text-align:left;
+  }
+  .bonus-card:hover{border-color:var(--gold);}
+  .bonus-card .cat-icon{background:var(--bg);}
+  .bonus-card h4{font-size:.86rem;font-weight:700;margin:0 0 3px;font-family:'Plus Jakarta Sans',sans-serif;}
+  .bonus-card p{margin:0;font-size:.76rem;color:var(--text-muted);line-height:1.4;}
+
+  /* ---------- category / favorites view ---------- */
+  .back-btn{
+    display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--text-muted);
+    font-size:.84rem;font-weight:600;cursor:pointer;padding:6px 0;margin-bottom:10px;
+  }
+  .back-btn:hover{color:var(--gold-deep);}
+  .back-btn svg{width:16px;height:16px;}
+
+  .cat-header{display:flex;gap:14px;align-items:flex-start;margin-bottom:20px;}
+  .cat-header .cat-icon{width:52px;height:52px;border-radius:12px;}
+  .cat-header .cat-icon svg{width:26px;height:26px;}
+  .cat-header h2{font-size:1.25rem;font-weight:800;}
+  .cat-header p{margin:6px 0 0;font-size:.88rem;color:var(--text-muted);max-width:60ch;line-height:1.5;}
+  .cat-header-note{
+    display:inline-block;margin-top:8px!important;font-size:.76rem!important;font-weight:600;
+    color:var(--gold-deep)!important;background:var(--surface-alt);padding:4px 10px;border-radius:999px;
+  }
+
+  .item-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .item-card{
+    position:relative;background:var(--surface);border:1px solid var(--border);border-radius:14px;
+    padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;
+  }
+  .item-card .tag{
+    align-self:flex-start;font-size:.7rem;font-weight:700;color:var(--gold-deep);
+    background:var(--surface-alt);padding:3px 9px;border-radius:999px;letter-spacing:.02em;
+  }
+  .item-card h3{font-size:.95rem;line-height:1.35;font-weight:700;padding-right:26px;}
+  .item-meta{display:flex;align-items:center;gap:6px;font-size:.74rem;color:var(--text-muted);font-variant-numeric:tabular-nums;}
+  .item-meta svg{width:13px;height:13px;flex:none;}
+  .item-row{display:flex;align-items:center;gap:8px;margin-top:auto;}
+  .view-btn{
+    flex:1;height:36px;border-radius:9px;border:none;background:var(--forest-700);color:#fff;
+    font-weight:700;font-size:.82rem;cursor:pointer;
+  }
+  .view-btn:hover{background:var(--forest-600);}
+  .fav-btn{
+    position:absolute;top:14px;right:12px;width:26px;height:26px;border:none;background:none;
+    cursor:pointer;color:var(--border-strong);display:flex;align-items:center;justify-content:center;
+  }
+  .fav-btn svg{width:18px;height:18px;}
+  .fav-btn[aria-pressed="true"]{color:var(--gold);}
+  .fav-btn:hover{color:var(--gold);}
+
+  .empty-state{
+    text-align:center;padding:56px 20px;color:var(--text-muted);
+    border:1px dashed var(--border-strong);border-radius:16px;
+  }
+  .empty-state svg{width:34px;height:34px;color:var(--border-strong);margin-bottom:10px;}
+  .empty-state p{margin:4px 0 0;font-size:.88rem;}
+
+  /* ---------- modal / recipe card ---------- */
+  .modal-backdrop{
+    position:fixed;inset:0;background:var(--scrim);z-index:60;
+    display:flex;align-items:flex-end;justify-content:center;padding:0;
+  }
+  .modal{
+    background:var(--surface);width:100%;max-width:580px;max-height:90vh;overflow:auto;
+    border-radius:20px 20px 0 0;box-shadow:var(--shadow);position:relative;
+  }
+  @media (min-width:640px){
+    .modal-backdrop{align-items:center;padding:20px;}
+    .modal{border-radius:20px;max-height:86vh;}
+  }
+  .modal-close{
+    position:absolute;top:14px;right:14px;z-index:2;
+    width:32px;height:32px;border-radius:9px;border:1px solid rgba(255,255,255,.35);background:rgba(8,31,19,.35);
+    color:#F3EFE3;cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);
+  }
+  .modal-close:hover{border-color:var(--gold-light);color:var(--gold-light);}
+
+  .recipe-banner{
+    background:linear-gradient(160deg, var(--forest-700), var(--forest-900));
+    color:#F3EFE3;padding:22px 22px 24px;text-align:center;
+    border-radius:20px 20px 0 0;
+  }
+  .recipe-badge{
+    display:inline-block;font-family:'Plus Jakarta Sans',sans-serif;font-size:.72rem;font-weight:800;
+    letter-spacing:.08em;color:var(--forest-900);background:var(--gold-light);
+    padding:5px 14px;border-radius:999px;margin-bottom:12px;
+  }
+  .recipe-title{
+    font-size:clamp(1.3rem,4vw,1.7rem);font-weight:700;text-transform:uppercase;letter-spacing:.015em;
+    line-height:1.15;margin:0;
+  }
+  .recipe-divider{display:flex;align-items:center;justify-content:center;gap:8px;margin:12px 0;color:var(--gold-light);}
+  .recipe-divider span{width:34px;height:1px;background:currentColor;opacity:.5;}
+  .recipe-divider svg{width:14px;height:14px;}
+  .recipe-subtitle{margin:0;font-size:.94rem;font-style:italic;color:#DCE7DF;font-family:'Fraunces',ui-serif,Georgia,serif;}
+
+  .recipe-body{padding:20px 20px calc(22px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px;}
+  .recipe-panel{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:16px;}
+  .block-label{
+    display:inline-flex;align-items:center;gap:7px;font-size:.8rem;font-weight:700;letter-spacing:.03em;
+    padding:6px 12px;border-radius:999px;margin-bottom:12px;
+  }
+  .block-label svg{width:15px;height:15px;flex:none;}
+  .block-ingredients .block-label{background:var(--gold-deep);color:#fff;}
+  .block-steps .block-label{background:var(--forest-700);color:#fff;}
+
+  .ingredient-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;}
+  .ingredient-list li{display:flex;align-items:flex-start;gap:9px;font-size:.9rem;line-height:1.45;color:var(--text);}
+  .ingredient-list li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--forest-700);margin-top:.5em;flex:none;}
+
+  .steps-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}
+  .steps-list li{display:flex;gap:11px;align-items:flex-start;font-size:.9rem;line-height:1.5;color:var(--text);}
+  .steps-list .step-num{
+    flex:none;width:24px;height:24px;border-radius:50%;background:var(--forest-700);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;
+    font-weight:800;font-size:.76rem;
+  }
+
+  .recipe-footer{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch;}
+  .tomar-card{
+    flex:1 1 220px;display:flex;gap:10px;align-items:flex-start;
+    border:1px solid var(--border-strong);border-radius:14px;padding:14px;
+  }
+  .tomar-card svg{width:19px;height:19px;flex:none;color:var(--gold-deep);margin-top:1px;}
+  .tomar-card strong{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gold-deep);margin-bottom:3px;}
+  .tomar-card p{margin:0;font-size:.86rem;line-height:1.5;color:var(--text);}
+  .time-chip{
+    flex:none;width:112px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    background:var(--surface-alt);border:1px solid var(--gold);border-radius:14px;padding:12px 10px;text-align:center;
+  }
+  .time-chip svg{width:20px;height:20px;color:var(--gold-deep);}
+  .time-chip span{font-size:.7rem;color:var(--text-muted);}
+  .time-chip b{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;color:var(--forest-700);font-variant-numeric:tabular-nums;}
+
+  .modal-fav{
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 14px;
+    border-radius:10px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);
+    font-size:.86rem;font-weight:600;cursor:pointer;width:100%;
+  }
+  .modal-fav svg{width:16px;height:16px;}
+  .modal-fav[aria-pressed="true"]{border-color:var(--gold);color:var(--gold-deep);background:var(--surface-alt);}
+
+  [hidden]{display:none!important;}
+
+  /* ---------- sidebar: gender block ---------- */
+  .gender-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
+  .gender-card{
+    flex-direction:column;align-items:flex-start;gap:2px;padding:10px 10px;height:auto;
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;
+  }
+  .gender-card:hover{background:rgba(255,255,255,.07);}
+  .gender-card.active{border-color:var(--gold-light);background:rgba(232,180,53,.12);}
+  .gender-emoji{font-size:1.1rem;line-height:1;}
+  .gender-title{font-size:.78rem;font-weight:700;color:#F3EFE3;}
+  .gender-sub{font-size:.68rem;color:#8FA593;}
+
+  /* ---------- sidebar: accordion ---------- */
+  .accordion{margin-bottom:4px;}
+  .accordion-toggle{
+    display:flex;align-items:center;justify-content:space-between;width:100%;
+    padding:10px 10px;border-radius:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);
+    color:#E7F0E9;font-size:.82rem;font-weight:700;cursor:pointer;
+  }
+  .accordion-toggle:hover{background:rgba(255,255,255,.06);}
+  .accordion-toggle .chevron{width:16px;height:16px;flex:none;transition:transform .18s ease;}
+  .accordion-toggle[aria-expanded="true"] .chevron{transform:rotate(180deg);}
+  .accordion-body{padding-top:4px;display:flex;flex-direction:column;gap:2px;}
+
+  /* ---------- generic auto-playing carousel ---------- */
+  .carousel{margin-bottom:28px;}
+  .carousel-viewport{overflow:hidden;border-radius:16px;}
+  .carousel-track{display:flex;touch-action:pan-y;cursor:grab;}
+  .carousel-track.dragging{cursor:grabbing;}
+  .carousel-slide{flex:0 0 100%;width:100%;box-sizing:border-box;}
+  .carousel-dots{display:flex;justify-content:center;gap:7px;margin-top:12px;}
+  .carousel-dot{width:7px;height:7px;padding:0;border-radius:50%;border:none;background:var(--border-strong);cursor:pointer;transition:background .2s ease, transform .2s ease;}
+  .carousel-dot.active{background:var(--gold);transform:scale(1.35);}
+
+  /* ---------- home: popular carousel slide ---------- */
+  .popular-card{
+    width:100%;box-sizing:border-box;background:var(--surface);border:1px solid var(--border);
+    border-radius:14px;padding:16px;box-shadow:var(--shadow);text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:8px;
+  }
+  .popular-card:hover{border-color:var(--gold);}
+  .popular-rank{
+    display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:800;color:var(--gold-deep);
+    text-transform:uppercase;letter-spacing:.04em;
+  }
+  .popular-rank svg{width:13px;height:13px;}
+  .popular-card h4{font-size:.9rem;font-weight:700;line-height:1.3;margin:0;}
+  .popular-card .p-cat{font-size:.74rem;color:var(--text-muted);}
+
+  /* ---------- responsive: drawer below 960px ---------- */
+  @media (max-width:959px){
+    .sidebar{
+      position:fixed;top:0;bottom:0;left:0;z-index:50;
+      transform:translateX(-100%);transition:transform .22s ease;
+      width:min(78vw,300px);
+      padding-top:calc(18px + env(safe-area-inset-top,0px));
+      box-shadow:12px 0 30px rgba(0,0,0,.25);
+    }
+    .sidebar.open{transform:translateX(0);}
+  }
+  @media (min-width:960px){
+    .hamburger{display:none;}
+    .topbar-brand{display:none;}
+  }
+  @media (max-width:520px){
+    .topbar{padding:10px 12px;gap:8px;}
+    main.content{padding:16px 14px 40px;}
+    .hero{padding:20px 18px;}
+  }
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <button class="hamburger" id="hamburgerBtn" aria-label="Apri il menu" aria-expanded="false" aria-controls="sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="topbar-brand">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4.4 0-8-3.6-8-9 4 0 6 1.4 7 3 .3-3.6 2.6-6.7 6-8.5.6 2.6.5 5-1 7 2 .3 3.6 1.6 4 3.5-2 2-4.8 3-6.6 2.7"/><path d="M12 21v-9"/></svg>
+      <span class="brand-word">Rimedi</span>
+    </div>
+    <div class="topbar-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="searchInput" placeholder="Cerca una ricetta o un sintomo…" autocomplete="off">
+      <div class="search-panel" id="searchPanel" hidden></div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <div class="scrim" id="scrim"></div>
+    <nav class="sidebar" id="sidebar" aria-label="Menu principale">
+      <div class="sidebar-brand">
+        <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4.4 0-8-3.6-8-9 4 0 6 1.4 7 3 .3-3.6 2.6-6.7 6-8.5.6 2.6.5 5-1 7 2 .3 3.6 1.6 4 3.5-2 2-4.8 3-6.6 2.7"/><path d="M12 21v-9"/></svg>
+        <div>
+          <div class="word">Rimedi Ancestrali</div>
+          <div class="sub">Area Membri</div>
+        </div>
+      </div>
+
+      <button class="nav-item" data-nav="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9.5a1 1 0 0 0 1 1h4.5v-6h3v6H19a1 1 0 0 0 1-1V10"/></svg>
+        Home
+      </button>
+      <button class="nav-item" data-nav="favorites">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-8.9C1 7.8 2.6 5 5.6 5c1.8 0 3.2 1 4.4 2.6C11.2 6 12.6 5 14.4 5c3 0 4.6 2.8 3.1 6.1C15 15.6 12 20 12 20Z"/></svg>
+        Preferiti
+        <span class="count" id="favCount"></span>
+      </button>
+
+      <div class="nav-group-label">Per te</div>
+      <div class="gender-grid">
+        <button class="nav-item gender-card" data-nav="cat" data-catid="prostata">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.3 0-6-2.2-6-5.6 0-2.6 1.6-4 2.6-5.7.7 1 1.6 1.5 2.4.9-.6-2.6.2-5 3-6.6.4 2.2.2 3.7-.6 5 1.7.5 3.6 2.4 3.6 5.4 0 3.4-1.7 6.6-5 6.6Z"/></svg>
+          <span class="gender-title">Salute dell'Uomo</span>
+          <span class="gender-sub">Prostata e benessere</span>
+        </button>
+        <button class="nav-item gender-card" data-nav="cat" data-catid="menopausa">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.1"/><ellipse cx="12" cy="6.3" rx="2.1" ry="3.1"/><ellipse cx="12" cy="17.7" rx="2.1" ry="3.1"/><ellipse cx="6.3" cy="12" rx="3.1" ry="2.1"/><ellipse cx="17.7" cy="12" rx="3.1" ry="2.1"/></svg>
+          <span class="gender-title">Salute della Donna</span>
+          <span class="gender-sub">Menopausa ed equilibrio</span>
+        </button>
+      </div>
+
+      <div class="accordion">
+        <button class="accordion-toggle" id="accordionToggle" aria-expanded="false" aria-controls="navCategories">
+          <span>Tutte le categorie di salute</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div id="navCategories" class="accordion-body" hidden></div>
+      </div>
+
+      <div class="nav-group-label">Extra</div>
+      <button class="nav-item" data-nav="bonus">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 3l2.2 2.2M12 3 9.8 5.2"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M4 13h16M12 13v7"/></svg>
+        Bonus Esclusivi
+        <span class="count">6</span>
+      </button>
+    </nav>
+
+    <main class="content" id="content">
+      <!-- HOME -->
+      <section id="view-home">
+        <div class="hero hero-plain">
+          <div>
+            <h1>Bentornato/a</h1>
+            <p>Il tuo spazio per trovare, con calma, il rimedio giusto per ogni momento.</p>
+          </div>
+        </div>
+
+        <div class="section-heading"><h2>Le più popolari della settimana</h2><span>Quello che la community guarda di più</span></div>
+        <div class="carousel" id="popularCarousel">
+          <div class="carousel-viewport"><div class="carousel-track" id="popularTrack"></div></div>
+          <div class="carousel-dots" id="popularDots"></div>
+        </div>
+
+        <div class="section-heading"><h2>Accesso alle categorie principali</h2><span>Incluso nel tuo piano</span></div>
+        <div class="cat-grid" id="catGrid"></div>
+
+        <div class="bonus-band">
+          <div class="section-heading"><h2>Bonus esclusivi</h2><span>Inclusi nel piano completo</span></div>
+          <div class="bonus-grid" id="bonusGridHome"></div>
+        </div>
+      </section>
+
+      <!-- CATEGORY / BONUS DETAIL -->
+      <section id="view-category" hidden>
+        <button class="back-btn" id="backBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>Torna alla home</button>
+        <div class="cat-header">
+          <div class="cat-icon" id="catHeaderIcon"></div>
+          <div>
+            <h2 id="catHeaderTitle"></h2>
+            <p id="catHeaderDesc"></p>
+          </div>
+        </div>
+        <div class="item-grid" id="catItemGrid"></div>
+      </section>
+
+      <!-- FAVORITES -->
+      <section id="view-favorites" hidden>
+        <div class="section-heading"><h2>I tuoi preferiti</h2><span id="favSubcount"></span></div>
+        <div class="item-grid" id="favGrid"></div>
+        <div class="empty-state" id="favEmpty" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-8.9C1 7.8 2.6 5 5.6 5c1.8 0 3.2 1 4.4 2.6C11.2 6 12.6 5 14.4 5c3 0 4.6 2.8 3.1 6.1C15 15.6 12 20 12 20Z"/></svg>
+          <p>Non hai ancora salvato nessuna ricetta. Tocca la stella su una scheda per aggiungerla qui.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <button class="modal-close" id="modalCloseBtn" aria-label="Chiudi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+
+    <div class="recipe-banner">
+      <span class="recipe-badge" id="modalBadge"></span>
+      <h3 class="recipe-title" id="modalTitle"></h3>
+      <div class="recipe-divider"><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c8.5 0 14-5.5 14-14-8.5 0-14 5.5-14 14Z"/></svg><span></span></div>
+      <p class="recipe-subtitle" id="modalSubtitle"></p>
+    </div>
+
+    <div class="recipe-body">
+      <div class="recipe-panel block-ingredients">
+        <span class="block-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c8.5 0 14-5.5 14-14-8.5 0-14 5.5-14 14Z"/></svg>Ingredienti necessari</span>
+        <ul class="ingredient-list" id="modalIngredients"></ul>
+      </div>
+
+      <div class="recipe-panel block-steps">
+        <span class="block-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8M10 3v4.5L5.5 15A3 3 0 0 0 8 20h8a3 3 0 0 0 2.5-5L14 7.5V3"/></svg>Modalità di preparazione</span>
+        <ol class="steps-list" id="modalSteps"></ol>
+      </div>
+
+      <div class="recipe-footer">
+        <div class="tomar-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c8.5 0 14-5.5 14-14-8.5 0-14 5.5-14 14Z"/></svg>
+          <div><strong>Come assumere</strong><p id="modalTomar"></p></div>
+        </div>
+        <div class="time-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+          <span>Preparazione in</span>
+          <b id="modalTime"></b>
+        </div>
+      </div>
+
+      <button class="modal-fav" id="modalFavBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-8.9C1 7.8 2.6 5 5.6 5c1.8 0 3.2 1 4.4 2.6C11.2 6 12.6 5 14.4 5c3 0 4.6 2.8 3.1 6.1C15 15.6 12 20 12 20Z"/></svg>
+        <span id="modalFavLabel">Salva nei preferiti</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var ICONS = {
+    spine: '<path d="M12 3v2.2M12 8v2M12 12.5v2M12 17v2M12 21v-2"/><circle cx="12" cy="5.2" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="9.6" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="18.4" r="1.1" fill="currentColor" stroke="none"/><path d="M12 5.2c3 .6 3 3.4 0 4M12 9.6c-3 .6-3 3.2 0 3.8M12 14c3 .5 3 3 0 3.6"/>',
+    joint: '<circle cx="6.5" cy="6.5" r="3"/><circle cx="17.5" cy="17.5" r="3"/><path d="M8.7 8.7 15.3 15.3" stroke-width="3.2"/>',
+    pulse: '<path d="M20.5 12H16l-2 5-3-10-2 5H3.5"/><path d="M12 20.5s-6.2-3.8-8.4-7.8C2.2 9.8 3.6 7 6.4 7c1.6 0 2.9.9 3.9 2.3C11.3 8 12.6 7 14.2 7"/>',
+    vitality: '<path d="M12 21c-3.3 0-6-2.2-6-5.6 0-2.6 1.6-4 2.6-5.7.7 1 1.6 1.5 2.4.9-.6-2.6.2-5 3-6.6.4 2.2.2 3.7-.6 5 1.7.5 3.6 2.4 3.6 5.4 0 3.4-1.7 6.6-5 6.6Z"/>',
+    flower: '<circle cx="12" cy="12" r="2.1"/><ellipse cx="12" cy="6.3" rx="2.1" ry="3.1"/><ellipse cx="12" cy="17.7" rx="2.1" ry="3.1"/><ellipse cx="6.3" cy="12" rx="3.1" ry="2.1"/><ellipse cx="17.7" cy="12" rx="3.1" ry="2.1"/>',
+    leaf: '<path d="M5 19c8.5 0 14-5.5 14-14-8.5 0-14 5.5-14 14Z"/><path d="M5 19c2-4 5-7.5 9.5-10.3"/>',
+    moon: '<path d="M20 14.3A8.5 8.5 0 1 1 9.7 4a7 7 0 0 0 10.3 10.3Z"/><path d="M18 3.5v3M16.5 5h3"/>',
+    lungs: '<path d="M12 3v7"/><path d="M12 10c-1-2.4-2.8-3-4.4-2.4C6 8.2 5 9.5 5 11.5c0 3-1 5.6-1.6 7 0 1.4 1.4 2 2.6 1.3 1.6-1 2.6-2.7 3-4.3.4-1.7.9-2.8 2-3.3"/><path d="M12 10c1-2.4 2.8-3 4.4-2.4C18 8.2 19 9.5 19 11.5c0 3 1 5.6 1.6 7 0 1.4-1.4 2-2.6 1.3-1.6-1-2.6-2.7-3-4.3-.4-1.7-.9-2.8-2-3.3"/>',
+    gift: '<path d="M12 3v3M12 3l2.2 2.2M12 3 9.8 5.2"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M4 13h16M12 13v7"/>'
+  };
+
+  function svg(name, extra){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" '+(extra||'')+'>'+ICONS[name]+'</svg>';
+  }
+
+  function R(title, tag, subtitle, time, ingredients, steps, tomar){
+    return {title:title, tag:tag, subtitle:subtitle, time:time, ingredients:ingredients, steps:steps, tomar:tomar};
+  }
+
+  var CATEGORIES = [
+    { id:"coluna", num:"01", icon:"spine", title:"Colonna, Schiena e Nervo Sciatico", featured:"30+",
+      desc:"Sollievo naturale per dolori lombari, cervicali, sciatalgia, spalle e crampi.",
+      items:[
+        R("Ricetta per il Dolore Lombare","Dolore Lombare","Ricetta di Erbe per Alleviare la Zona Lombare","10 min",
+          ["1 litro di acquavite bianca o aceto di mele","3 cucchiai di arnica secca","2 cucchiai di rosmarino fresco","1 cucchiaio di zenzero grattugiato"],
+          ["Metti l'arnica, il rosmarino e lo zenzero in un barattolo di vetro scuro.","Copri con l'acquavite o l'aceto e chiudi bene il coperchio.","Lascia macerare in un luogo fresco e buio per 15 giorni, agitando il barattolo ogni 2 giorni."],
+          "Applica con leggeri massaggi sulla zona lombare, 2 volte al giorno, evitando la pelle lesa."),
+        R("Tisana Antinfiammatoria per il Nervo Sciatico","Nervo Sciatico","Infuso di Curcuma e Zenzero per il Nervo Sciatico","12 min",
+          ["500 ml di acqua","1 cucchiaino di curcuma in polvere","1 cucchiaino di zenzero grattugiato","1 cucchiaio di miele"],
+          ["Metti l'acqua sul fuoco con la curcuma e lo zenzero e lascia bollire per 5 minuti.","Togli dal fuoco, copri e lascia riposare altri 5 minuti.","Filtra in una tazza e dolcifica con il miele."],
+          "Bevi tiepido, 1 tazza dopo pranzo e un'altra dopo cena."),
+        R("Impacco Caldo per la Cervicale","Cervicale","Impacco di Erbe per Alleviare la Tensione nella Cervicale","8 min",
+          ["300 ml di acqua","2 cucchiai di fiori di camomilla","1 cucchiaio di sale grosso","1 asciugamano piccolo"],
+          ["Fai bollire l'acqua con la camomilla per 5 minuti e filtra.","Sciogli il sale grosso nel liquido ancora caldo.","Immergi l'asciugamano, strizza l'eccesso e applicalo tiepido sulla cervicale."],
+          "Tieni l'impacco sulla zona per 10-15 minuti, 1 volta al giorno."),
+        R("Olio da Massaggio per Spalle Tese","Spalle Tese","Olio Riscaldato al Rosmarino per Spalle Tese","25 min",
+          ["100 ml di olio extravergine di oliva","2 rametti di rosmarino fresco","5 chiodi di garofano","1 piccolo pezzo di cannella in stecca"],
+          ["Scalda l'olio a bagnomaria a fuoco basso, senza farlo bollire.","Aggiungi il rosmarino, i chiodi di garofano e la cannella e lascia in infusione per 20 minuti.","Filtra in un barattolo di vetro e lascia raffreddare prima di usare."],
+          "Massaggia le spalle con qualche goccia di olio tiepido, 1-2 volte al giorno."),
+        R("Infuso per i Crampi Notturni","Crampi Notturni","Tisana di Banana e Cannella per i Crampi Notturni","15 min",
+          ["1 buccia di banana ben lavata","300 ml di acqua","1 stecca di cannella","1 cucchiaino di miele"],
+          ["Metti la buccia di banana e la cannella nell'acqua e porta a bollore per 10 minuti.","Togli dal fuoco e lascia riposare coperto per 5 minuti.","Filtra in una tazza e dolcifica con il miele."],
+          "Bevi tiepido circa 1 ora prima di coricarti."),
+        R("Ricetta dell'Alentejo di Foglie di Ulivo e Rosmarino","Dolori Reumatici","Ricetta Tradizionale dell'Alentejo per i Dolori Reumatici alla Schiena","12 min",
+          ["750 ml di acquavite o vino rosso","4 cucchiai di foglie di ulivo secche","3 cucchiai di rosmarino fresco","1 scorza di limone"],
+          ["Metti le foglie di ulivo, il rosmarino e la scorza di limone in un barattolo di vetro scuro.","Copri con l'acquavite o il vino rosso e chiudi bene il coperchio.","Lascia macerare per 15 giorni in un luogo fresco e buio, agitando il barattolo ogni 2 giorni.","Filtra il preparato e conservalo in un barattolo pulito."],
+          "Applica con massaggi sulla zona lombare, 2 volte al giorno, oppure prendi 1 cucchiaio diluito in acqua prima dei pasti."),
+        R("Tisana di Carqueja per i Dolori Reumatici","Dolori Reumatici","Infuso di Carqueja, Erba Tradizionale Portoghese per i Dolori","10 min",
+          ["500 ml di acqua","2 cucchiai di carqueja secca","Succo di mezzo limone"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi la carqueja, copri e lascia in infusione per 10 minuti.","Filtra e aggiungi il succo di limone."],
+          "Bevi 1 tazza prima di pranzo e un'altra prima di cena, per periodi di 2 settimane."),
+        R("Olio di Ginepro per Massaggi Muscolari","Dolori Muscolari","Olio di Ginepro alla Maniera di Trás-os-Montes per la Schiena","20 min",
+          ["100 ml di olio extravergine di oliva","3 cucchiai di bacche di ginepro schiacciate","1 rametto di rosmarino fresco"],
+          ["Scalda l'olio a bagnomaria a fuoco basso.","Aggiungi il ginepro schiacciato e il rosmarino e lascia in infusione per 15 minuti, senza bollire.","Filtra in un barattolo di vetro e lascia raffreddare prima di usare."],
+          "Massaggia la zona dolorante con l'olio tiepido, 1-2 volte al giorno."),
+        R("Cataplasma di Malva per l'Infiammazione Lombare","Infiammazione Lombare","Cataplasma Tradizionale di Malva per Calmare la Zona Lombare","10 min",
+          ["4 cucchiai di foglie di malva fresche o secche","Acqua calda quanto basta","1 panno di cotone pulito"],
+          ["Scotta le foglie di malva in acqua calda finché si ammorbidiscono.","Scola bene e schiaccia le foglie fino a formare una pasta.","Metti la pasta tiepida su un panno di cotone e applicala sulla zona lombare."],
+          "Tieni il cataplasma per 20 minuti sulla zona dolorante, 1 volta al giorno."),
+        R("Ricetta di Cisto per il Mal di Schiena","Mal di Schiena","Ricetta dell'Algarve di Cisto per il Mal di Schiena","12 min",
+          ["750 ml di acquavite","3 cucchiai di foglie di cisto secche","2 cucchiai di rosmarino secco","50 g di miele"],
+          ["Metti le foglie di cisto e il rosmarino in un barattolo di vetro scuro.","Copri con l'acquavite e chiudi bene il coperchio.","Lascia macerare per 20 giorni in un luogo fresco e buio, agitando il barattolo ogni settimana.","Filtra e aggiungi il miele, mescolando finché si scioglie."],
+          "Prendi 1 cucchiaio diluito in un bicchiere d'acqua, 1 volta al giorno.")
+      ] },
+    { id:"articulacoes", num:"02", icon:"joint", title:"Articolazioni e Cartilagini", featured:"25+",
+      desc:"Ricette per artrite, artrosi, ginocchia doloranti e osteoporosi.",
+      items:[
+        R("Ricetta per l'Artrite","Artrite","Ricetta di Erbe Amare per l'Artrite","10 min",
+          ["750 ml di vino bianco o aceto di mele","2 cucchiai di corteccia di salice","2 cucchiai di ortica secca","1 cucchiaio di zenzero a pezzetti"],
+          ["Metti la corteccia di salice, l'ortica e lo zenzero in un barattolo di vetro.","Copri con il vino o l'aceto e chiudi bene.","Lascia macerare per 12 giorni in un luogo fresco, agitando il barattolo ogni giorno."],
+          "Prendi 1 cucchiaio diluito in un bicchiere d'acqua, 1 volta al giorno, ai pasti."),
+        R("Pomata allo Zenzero per le Ginocchia","Ginocchia","Pomata Calda allo Zenzero per Ginocchia Doloranti","20 min",
+          ["3 cucchiai di zenzero grattugiato","4 cucchiai di olio extravergine di oliva","1 cucchiaio di cera d'api"],
+          ["Scalda l'olio a bagnomaria e aggiungi lo zenzero grattugiato.","Lascia in infusione a fuoco molto basso per 15 minuti, senza bollire.","Filtra, aggiungi la cera d'api ancora caldo e mescola finché si scioglie e si addensa."],
+          "Applica una piccola quantità sulle ginocchia con un massaggio circolare, 1-2 volte al giorno."),
+        R("Tisana di Equiseto per l'Osteoporosi","Osteoporosi","Infuso di Equiseto Ricco di Minerali per le Ossa","12 min",
+          ["500 ml di acqua","2 cucchiai di equiseto secco","Succo di mezzo limone"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi l'equiseto, copri e lascia in infusione per 10 minuti.","Filtra e aggiungi il succo di limone."],
+          "Bevi 1 tazza a fine mattina, in cicli di 3 settimane con 1 settimana di pausa."),
+        R("Cataplasma per l'Artrosi","Artrosi","Cataplasma di Argilla ed Erbe per l'Artrosi","10 min",
+          ["3 cucchiai di argilla verde in polvere","Acqua tiepida quanto basta","1 cucchiaio di aceto di mele","1 cucchiaino di olio di rosmarino"],
+          ["In una ciotola non metallica, mescola l'argilla con acqua tiepida fino a formare una pasta densa.","Aggiungi l'aceto di mele e l'olio di rosmarino e mescola bene.","Applica uno strato spesso sull'articolazione e copri con un panno di cotone."],
+          "Tieni per 20 minuti e poi risciacqua con acqua tiepida; usa 3 volte a settimana."),
+        R("Bagno di Erbe per le Mani Gonfie","Mani Gonfie","Bagno Tiepido di Erbe per le Mani Gonfie","10 min",
+          ["1 litro di acqua","3 cucchiai di fiori di calendula","2 cucchiai di sale grosso","1 cucchiaio di succo di limone"],
+          ["Fai bollire l'acqua con la calendula per 5 minuti e togli dal fuoco.","Lascia intiepidire e sciogli il sale grosso e il succo di limone.","Versa in una ciotola profonda dove possano stare le mani."],
+          "Immergi le mani per 15 minuti, 1 volta al giorno."),
+        R("Tisana di Foglie di Ulivo per le Articolazioni","Salute Articolare","Infuso di Foglie di Ulivo, Rimedio Tradizionale Portoghese","10 min",
+          ["500 ml di acqua","2 cucchiai di foglie di ulivo secche","Succo di mezzo limone"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi le foglie di ulivo, copri e lascia in infusione per 10 minuti.","Filtra e aggiungi il succo di limone."],
+          "Bevi 1 tazza al mattino e un'altra alla sera, per 3 settimane."),
+        R("Ricetta di Carqueja e Ginepro per l'Artrite","Artrite","Ricetta di Trás-os-Montes per l'Artrite","12 min",
+          ["750 ml di vino bianco o acquavite","3 cucchiai di carqueja secca","2 cucchiai di bacche di ginepro","1 scorza di arancia"],
+          ["Metti la carqueja, il ginepro e la scorza di arancia in un barattolo di vetro.","Copri con il vino o l'acquavite e chiudi bene il coperchio.","Lascia macerare per 15 giorni in un luogo fresco, agitando il barattolo ogni 2 giorni.","Filtra in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in acqua, 1 volta al giorno, ai pasti."),
+        R("Impacco di Malva per Ginocchia Infiammate","Ginocchia Infiammate","Impacco di Malva per Calmare le Ginocchia","10 min",
+          ["500 ml di acqua","4 cucchiai di foglie di malva secche","1 asciugamano piccolo"],
+          ["Fai bollire l'acqua con la malva per 8 minuti.","Lascia intiepidire e filtra il liquido.","Immergi l'asciugamano, strizza l'eccesso e applicalo tiepido sulle ginocchia."],
+          "Tieni l'impacco per 15 minuti, 1-2 volte al giorno."),
+        R("Olio di Rosmarino e Ginepro per Massaggi alle Mani","Mani Doloranti","Olio Ancestrale per le Mani con Dolori Articolari","18 min",
+          ["100 ml di olio extravergine di oliva","2 cucchiai di bacche di ginepro schiacciate","2 rametti di rosmarino fresco"],
+          ["Scalda l'olio a bagnomaria a fuoco basso.","Aggiungi il ginepro e il rosmarino e lascia in infusione per 15 minuti.","Filtra in un barattolo di vetro e lascia raffreddare."],
+          "Massaggia le mani con l'olio tiepido, 2 volte al giorno."),
+        R("Tisana di Cisto per i Dolori Articolari","Dolori Articolari","Infuso dell'Algarve di Cisto per le Articolazioni","10 min",
+          ["500 ml di acqua","2 cucchiai di foglie di cisto secche","1 cucchiaino di miele"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi il cisto, copri e lascia in infusione per 10 minuti.","Filtra in una tazza e dolcifica con il miele."],
+          "Bevi 1 tazza a fine giornata, per 2 settimane.")
+      ] },
+    { id:"pressao", num:"03", icon:"pulse", title:"Pressione, Circolazione e Metabolismo", featured:"45+",
+      desc:"Formule per ipertensione, diabete, vene varicose e ritenzione idrica.",
+      items:[
+        R("Tisana per Abbassare la Pressione","Pressione Arteriosa","Infuso di Ibisco e Limone per Sostenere la Pressione Arteriosa","10 min",
+          ["500 ml di acqua","2 cucchiai di fiori di ibisco secchi","Succo di mezzo limone","1 cucchiaino di miele (facoltativo)"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi l'ibisco, copri e lascia in infusione per 8 minuti.","Filtra, aggiungi il succo di limone e dolcifica a piacere."],
+          "Bevi tiepido o freddo, 1 tazza a fine mattina. Mantieni il consueto controllo medico."),
+        R("Ricetta di Amamelide e Ippocastano","Vene Varicose","Rinforza i Vasi Sanguigni e Migliora la Circolazione","15 min",
+          ["1 litro di grappa","50 g di foglie di amamelide secche","50 g di ippocastano secco","50 g di radice di zenzero secca","50 g di scorza di arancia secca","50 g di miele"],
+          ["Metti le foglie di amamelide, l'ippocastano, la radice di zenzero e la scorza di arancia in un barattolo di vetro scuro.","Aggiungi la grappa, coprendo completamente gli ingredienti.","Chiudi bene il barattolo e lascia macerare in un luogo buio per 30 giorni, agitando quotidianamente.","Dopo 30 giorni, filtra il composto e aggiungi il miele, mescolando bene finché si scioglie completamente.","Trasferisci il preparato in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in mezzo bicchiere d'acqua, 1 volta al giorno, per 1 mese, con una pausa di 1-2 settimane prima di riprendere se necessario."),
+        R("Ricetta di Zenzero e Rosmarino","Gonfiore e Dolore alle Gambe","Migliora la Circolazione e Allevia il Gonfiore alle Gambe","15 min",
+          ["1 litro di grappa","50 g di radice di zenzero secca","50 g di rosmarino secco","50 g di foglie di menta secche","50 g di scorza di limone secca","50 g di miele"],
+          ["Metti la radice di zenzero, il rosmarino, la menta e la scorza di limone in un barattolo di vetro scuro.","Aggiungi la grappa, coprendo completamente gli ingredienti.","Chiudi bene il barattolo e lascia macerare in un luogo buio per 30 giorni, agitando quotidianamente.","Dopo 30 giorni, filtra il composto e aggiungi il miele, mescolando bene finché si scioglie completamente.","Trasferisci il preparato in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in mezzo bicchiere d'acqua, 1 volta al giorno, per 1 mese, con una pausa di 1-2 settimane prima di riprendere se necessario."),
+        R("Ricetta di Centella Asiatica e Menta","Vasi Sanguigni","Rinforza i Vasi Sanguigni e Previene i Problemi Circolatori","15 min",
+          ["1 litro di grappa","50 g di foglie di centella asiatica secche","50 g di foglie di menta secche","50 g di radice di zenzero secca","50 g di scorza di arancia secca","50 g di miele"],
+          ["Metti le foglie di centella asiatica, la menta, la radice di zenzero e la scorza di arancia in un barattolo di vetro scuro.","Aggiungi la grappa, coprendo completamente gli ingredienti.","Chiudi bene il barattolo e lascia macerare in un luogo buio per 30 giorni, agitando quotidianamente.","Dopo 30 giorni, filtra il composto e aggiungi il miele, mescolando bene finché si scioglie completamente.","Trasferisci il preparato in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in mezzo bicchiere d'acqua, 1 volta al giorno, per 1 mese, con una pausa di 1-2 settimane prima di riprendere se necessario."),
+        R("Ricetta di Cipresso e Amamelide","Gambe Stanche","Rinforza le Vene e Allevia le Gambe Stanche","15 min",
+          ["1 litro di grappa","50 g di foglie di cipresso secche","50 g di foglie di amamelide secche","50 g di radice di zenzero secca","50 g di scorza di limone secca","50 g di miele"],
+          ["Metti le foglie di cipresso, l'amamelide, la radice di zenzero e la scorza di limone in un barattolo di vetro scuro.","Aggiungi la grappa, coprendo completamente gli ingredienti.","Chiudi bene il barattolo e lascia macerare in un luogo buio per 30 giorni, agitando quotidianamente.","Dopo 30 giorni, filtra il composto e aggiungi il miele, mescolando bene finché si scioglie completamente.","Trasferisci il preparato in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in mezzo bicchiere d'acqua, 1 volta al giorno, per 1 mese, con una pausa di 1-2 settimane prima di riprendere se necessario."),
+        R("Ricetta di Ippocastano ed Equiseto","Gonfiore e Vene Varicose","Rinforza le Vene e Previene Gonfiore e Vene Varicose","15 min",
+          ["1 litro di grappa","50 g di ippocastano secco","50 g di equiseto secco","50 g di radice di zenzero secca","50 g di foglie di menta secche","50 g di miele"],
+          ["Metti l'ippocastano, l'equiseto, la radice di zenzero e la menta in un barattolo di vetro scuro.","Aggiungi la grappa, coprendo completamente gli ingredienti.","Chiudi bene il barattolo e lascia macerare in un luogo buio per 30 giorni, agitando quotidianamente.","Dopo 30 giorni, filtra il composto e aggiungi il miele, mescolando bene finché si scioglie completamente.","Trasferisci il preparato in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in mezzo bicchiere d'acqua, 1 volta al giorno, per 1 mese, con una pausa di 1-2 settimane prima di riprendere se necessario."),
+        R("Ricetta di Ginkgo Biloba e Rosmarino","Trombosi e Vene Varicose","Migliora la Circolazione e Aiuta a Prevenire la Trombosi","15 min",
+          ["1 litro di grappa","50 g di foglie di ginkgo biloba secche","50 g di rosmarino secco","50 g di radice di zenzero secca","50 g di scorza di limone secca","50 g di miele"],
+          ["Metti le foglie di ginkgo biloba, il rosmarino, la radice di zenzero e la scorza di limone in un barattolo di vetro scuro.","Aggiungi la grappa, coprendo completamente gli ingredienti.","Chiudi bene il barattolo e lascia macerare in un luogo buio per 30 giorni, agitando quotidianamente.","Dopo 30 giorni, filtra il composto e aggiungi il miele, mescolando bene finché si scioglie completamente.","Trasferisci il preparato in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in mezzo bicchiere d'acqua, 1 volta al giorno, per 1 mese, con una pausa di 1-2 settimane prima di riprendere se necessario."),
+        R("Ricetta di Prezzemolo e Aglio","Disintossicazione","Migliora la Circolazione e Disintossica l'Organismo","15 min",
+          ["1 litro di grappa","50 g di prezzemolo secco","50 g di aglio tritato e essiccato","50 g di radice di zenzero secca","50 g di foglie di menta secche","50 g di miele"],
+          ["Metti il prezzemolo, l'aglio, la radice di zenzero e la menta in un barattolo di vetro scuro.","Aggiungi la grappa, coprendo completamente gli ingredienti.","Chiudi bene il barattolo e lascia macerare in un luogo buio per 30 giorni, agitando quotidianamente.","Dopo 30 giorni, filtra il composto e aggiungi il miele, mescolando bene finché si scioglie completamente.","Trasferisci il preparato in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in mezzo bicchiere d'acqua, 1 volta al giorno, per 1 mese, con una pausa di 1-2 settimane prima di riprendere se necessario."),
+        R("Ricetta di Ibisco e Cannella","Pressione Arteriosa","Migliora la Circolazione e Aiuta a Controllare la Pressione Arteriosa","15 min",
+          ["1 litro di grappa","50 g di fiori di ibisco secchi","50 g di cannella in stecca","50 g di radice di zenzero secca","50 g di scorza di limone secca","50 g di miele"],
+          ["Metti i fiori di ibisco, la cannella, la radice di zenzero e la scorza di limone in un barattolo di vetro scuro.","Aggiungi la grappa, coprendo completamente gli ingredienti.","Chiudi bene il barattolo e lascia macerare in un luogo buio per 30 giorni, agitando quotidianamente.","Dopo 30 giorni, filtra il composto e aggiungi il miele, mescolando bene finché si scioglie completamente.","Trasferisci il preparato in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in mezzo bicchiere d'acqua, 1 volta al giorno, per 1 mese, con una pausa di 1-2 settimane prima di riprendere se necessario."),
+        R("Ricetta di Sedano e Salsapariglia","Eliminare le Tossine","Migliora la Circolazione e Aiuta a Eliminare le Tossine","15 min",
+          ["1 litro di grappa","50 g di semi di sedano secchi","50 g di radice di salsapariglia secca","50 g di radice di zenzero secca","50 g di foglie di menta secche","50 g di miele"],
+          ["Metti i semi di sedano, la salsapariglia, la radice di zenzero e la menta in un barattolo di vetro scuro.","Aggiungi la grappa, coprendo completamente gli ingredienti.","Chiudi bene il barattolo e lascia macerare in un luogo buio per 30 giorni, agitando quotidianamente.","Dopo 30 giorni, filtra il composto e aggiungi il miele, mescolando bene finché si scioglie completamente.","Trasferisci il preparato in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in mezzo bicchiere d'acqua, 1 volta al giorno, per 1 mese, con una pausa di 1-2 settimane prima di riprendere se necessario."),
+        R("Infuso per Controllare lo Zucchero","Zucchero nel Sangue","Tisana di Cannella e Alloro per Sostenere i Livelli di Zucchero","15 min",
+          ["500 ml di acqua","1 stecca di cannella","2 foglie di alloro","Succo di mezzo limone"],
+          ["Porta l'acqua a bollore con la cannella e l'alloro per 5 minuti.","Togli dal fuoco, copri e lascia riposare per 10 minuti.","Filtra e aggiungi il succo di limone."],
+          "Bevi 1 tazza prima di pranzo e un'altra prima di cena. Mantieni il consueto controllo medico."),
+        R("Impacco per le Vene Varicose","Vene Varicose","Impacco Freddo di Amamelide per Gambe con Vene Varicose","10 min",
+          ["300 ml di acqua","3 cucchiai di amamelide secca (oppure 100 ml di acqua di amamelide)","1 cucchiaio di aceto di mele","1 asciugamano piccolo"],
+          ["Fai bollire l'acqua con l'amamelide per 5 minuti e filtra.","Lascia raffreddare in frigorifero finché è fredda e aggiungi l'aceto di mele.","Immergi l'asciugamano nel liquido, strizza l'eccesso e applicalo sulle gambe."],
+          "Tieni l'impacco per 15 minuti con le gambe sollevate, alla sera."),
+        R("Tisana Diuretica per la Ritenzione Idrica","Ritenzione Idrica","Infuso di Equiseto e Tarassaco per la Ritenzione Idrica","12 min",
+          ["500 ml di acqua","1 cucchiaio di equiseto secco","1 cucchiaio di foglie di tarassaco secche","Succo di mezzo limone"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi l'equiseto e il tarassaco, copri e lascia in infusione per 10 minuti.","Filtra e aggiungi il succo di limone."],
+          "Bevi 1 tazza a fine mattina, lontano dall'ora di coricarti."),
+        R("Tisana di Foglie di Ulivo per la Tensione Arteriosa","Tensione Arteriosa","Infuso Tradizionale Portoghese di Foglie di Ulivo","10 min",
+          ["500 ml di acqua","2 cucchiai di foglie di ulivo secche","Succo di mezzo limone"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi le foglie di ulivo, copri e lascia in infusione per 10 minuti.","Filtra e aggiungi il succo di limone."],
+          "Bevi 1 tazza al mattino, a digiuno. Mantieni il consueto controllo medico."),
+        R("Ricetta di Carqueja per la Circolazione","Circolazione","Ricetta dell'Alentejo di Carqueja per la Circolazione","12 min",
+          ["750 ml di vino bianco o acquavite","3 cucchiai di carqueja secca","1 scorza di limone","50 g di miele"],
+          ["Metti la carqueja e la scorza di limone in un barattolo di vetro.","Copri con il vino o l'acquavite e chiudi bene il coperchio.","Lascia macerare per 15 giorni in un luogo fresco, agitando il barattolo ogni 2 giorni.","Filtra e aggiungi il miele, mescolando finché si scioglie."],
+          "Prendi 1 cucchiaio diluito in acqua, 1 volta al giorno."),
+        R("Tisana di Ginepro per la Ritenzione Idrica","Ritenzione Idrica","Infuso di Ginepro, Rimedio di Trás-os-Montes","10 min",
+          ["500 ml di acqua","1 cucchiaio di bacche di ginepro schiacciate","Succo di mezzo limone"],
+          ["Porta l'acqua a bollore con il ginepro per 5 minuti.","Togli dal fuoco, copri e lascia riposare per 5 minuti.","Filtra e aggiungi il succo di limone."],
+          "Bevi 1 tazza a fine mattina, lontano dall'ora di coricarti."),
+        R("Infuso di Puleggio per la Circolazione","Circolazione","Tisana di Puleggio, Erba Tradizionale dei Campi Portoghesi","8 min",
+          ["500 ml di acqua","2 cucchiai di puleggio secco","1 cucchiaino di miele"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi il puleggio, copri e lascia in infusione per 8 minuti.","Filtra in una tazza e dolcifica con il miele."],
+          "Bevi 1 tazza dopo pranzo."),
+        R("Tisana Depurativa di Carqueja e Ulivo","Depurativo","Tisana Depurativa di Trás-os-Montes per la Circolazione","10 min",
+          ["500 ml di acqua","1 cucchiaio di carqueja secca","1 cucchiaio di foglie di ulivo secche"],
+          ["Porta l'acqua a bollore con la carqueja e le foglie di ulivo per 5 minuti.","Togli dal fuoco, copri e lascia riposare per 5 minuti.","Filtra in una tazza."],
+          "Bevi 1 tazza prima di pranzo, per 2 settimane.")
+      ] },
+    { id:"prostata", num:"04", icon:"vitality", title:"Prostata e Salute Maschile", featured:"15+",
+      desc:"Supporto naturale alla prostata e ad altri disturbi comuni maschili.",
+      items:[
+        R("Ricetta per la Prostata","Prostata","Ricetta di Semi di Zucca per la Prostata","10 min",
+          ["750 ml di vino bianco o aceto di mele","3 cucchiai di semi di zucca tritati","1 cucchiaio di ortica secca","1 scorza di limone"],
+          ["Metti i semi di zucca, l'ortica e la scorza di limone in un barattolo di vetro.","Copri con il vino o l'aceto e chiudi bene il coperchio.","Lascia macerare per 10 giorni in un luogo fresco, agitando il barattolo ogni 2 giorni."],
+          "Prendi 1 piccolo bicchierino (20 ml) a fine giornata."),
+        R("Tisana di Ortica e Ginepro per il Comfort Urinario","Comfort Urinario","Infuso di Ortica e Ginepro per il Sollievo Urinario","10 min",
+          ["500 ml di acqua","1 cucchiaio di ortica secca","1 cucchiaino di bacche di ginepro schiacciate"],
+          ["Porta l'acqua a bollore con l'ortica e il ginepro per 5 minuti.","Togli dal fuoco, copri e lascia riposare per 5 minuti.","Filtra in una tazza."],
+          "Bevi 1 tazza al mattino e un'altra alla sera."),
+        R("Ricetta di Carqueja per la Prostata","Prostata","Ricetta dell'Alentejo di Carqueja per il Comfort della Prostata","12 min",
+          ["750 ml di vino bianco o acquavite","3 cucchiai di carqueja secca","1 cucchiaio di semi di zucca tritati"],
+          ["Metti la carqueja e i semi di zucca in un barattolo di vetro.","Copri con il vino o l'acquavite e chiudi bene il coperchio.","Lascia macerare per 15 giorni in un luogo fresco, agitando il barattolo ogni 2 giorni.","Filtra in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in acqua, 1 volta al giorno, a fine giornata."),
+        R("Tisana di Salsapariglia e Foglie di Ulivo per l'Infiammazione della Prostata","Infiammazione","Infuso per il Comfort e il Benessere della Prostata","10 min",
+          ["500 ml di acqua","1 cucchiaio di radice di salsapariglia secca","1 cucchiaio di foglie di ulivo secche"],
+          ["Porta l'acqua a bollore con la salsapariglia e le foglie di ulivo per 8 minuti.","Togli dal fuoco, copri e lascia riposare per 5 minuti.","Filtra in una tazza."],
+          "Bevi 1 tazza dopo cena."),
+        R("Tonico Capillare di Rosmarino e Cisto Contro la Caduta dei Capelli","Caduta dei Capelli","Tonico Tradizionale di Trás-os-Montes Contro la Caduta dei Capelli","15 min",
+          ["500 ml di acqua","3 cucchiai di rosmarino fresco","2 cucchiai di foglie di cisto secche","1 cucchiaio di aceto di mele"],
+          ["Porta l'acqua a bollore con il rosmarino e il cisto per 8 minuti.","Togli dal fuoco, copri e lascia raffreddare completamente.","Filtra in un barattolo e aggiungi l'aceto di mele."],
+          "Applica sul cuoio capelluto dopo il lavaggio, senza risciacquare, 3 volte a settimana."),
+        R("Tisana di Equiseto e Ginepro per il Comfort Urinario","Comfort Urinario","Infuso di Equiseto e Ginepro per il Benessere Urinario","10 min",
+          ["500 ml di acqua","1 cucchiaio di equiseto secco","1 cucchiaino di bacche di ginepro schiacciate"],
+          ["Porta l'acqua a bollore con l'equiseto e il ginepro per 5 minuti.","Togli dal fuoco, copri e lascia riposare per 5 minuti.","Filtra in una tazza."],
+          "Bevi 1 tazza a fine mattina.")
+      ] },
+    { id:"menopausa", num:"05", icon:"flower", title:"Menopausa ed Equilibrio Femminile", featured:"35+",
+      desc:"Ricette per vampate di calore, sindrome premestruale, endometriosi e infezioni urinarie.",
+      items:[
+        R("Tisana per le Vampate di Calore","Vampate di Calore","Infuso di Salvia per le Vampate di Calore","12 min",
+          ["500 ml di acqua","2 cucchiai di foglie di salvia","Succo di mezzo limone"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi la salvia, copri e lascia in infusione per 10 minuti.","Filtra e aggiungi il succo di limone."],
+          "Bevi 1 tazza fredda durante il giorno, a piccoli sorsi, nei giorni più caldi."),
+        R("Ricetta per la Sindrome Premestruale","Sindrome Premestruale","Ricetta di Melissa e Camomilla per la Sindrome Premestruale","10 min",
+          ["500 ml di aceto di mele o vino bianco","2 cucchiai di melissa secca","2 cucchiai di fiori di camomilla","1 scorza di arancia"],
+          ["Metti la melissa, la camomilla e la scorza di arancia in un barattolo di vetro.","Copri con l'aceto o il vino e chiudi bene il coperchio.","Lascia macerare per 8 giorni in un luogo fresco, agitando il barattolo ogni giorno."],
+          "Prendi 1 cucchiaio diluito in un bicchiere d'acqua tiepida, 1 volta al giorno nei giorni prima del ciclo."),
+        R("Infuso per l'Endometriosi","Endometriosi","Tisana di Zenzero e Cannella per il Disagio Pelvico","13 min",
+          ["500 ml di acqua","1 cucchiaino di zenzero grattugiato","1 stecca di cannella","1 cucchiaino di miele"],
+          ["Porta l'acqua a bollore con lo zenzero e la cannella per 5 minuti.","Togli dal fuoco, copri e lascia riposare per 8 minuti.","Filtra in una tazza e dolcifica con il miele."],
+          "Bevi tiepido, 2 volte al giorno nei giorni di maggiore disagio. Mantieni il consueto controllo ginecologico."),
+        R("Tisana per l'Infezione Urinaria","Infezione Urinaria","Infuso di Mirtillo Rosso ed Equiseto per il Tratto Urinario","15 min",
+          ["500 ml di acqua","1 cucchiaio di mirtillo rosso secco","1 cucchiaio di equiseto secco","Succo di mezzo limone"],
+          ["Porta l'acqua a bollore con il mirtillo rosso e l'equiseto per 5 minuti.","Togli dal fuoco, copri e lascia in infusione per 10 minuti.","Filtra e aggiungi il succo di limone."],
+          "Bevi 2-3 tazze durante il giorno, ben distanziate."),
+        R("Tonico per l'Equilibrio Ormonale","Equilibrio Ormonale","Tonico di Semi di Lino e Cannella per l'Equilibrio Ormonale","8 min",
+          ["2 cucchiai di semi di lino macinati","250 ml di latte vegetale","1 cucchiaino di cannella in polvere","1 cucchiaino di miele"],
+          ["Scalda il latte vegetale a fuoco basso, senza farlo bollire.","Aggiungi il lino macinato e la cannella e mescola bene per 2 minuti.","Togli dal fuoco e dolcifica con il miele."],
+          "Bevi tiepido nel tardo pomeriggio, 3-4 volte a settimana."),
+        R("Tisana di Salvia per le Vampate","Vampate","L'Infuso Portoghese più Tradizionale per le Vampate","8 min",
+          ["500 ml di acqua","2 cucchiai di foglie di salvia secche","Succo di mezzo limone"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi la salvia, copri e lascia in infusione per 8 minuti.","Filtra e aggiungi il succo di limone."],
+          "Bevi 1 tazza fredda, a piccoli sorsi, nei momenti di maggior calore."),
+        R("Ricetta di Salvia e Iperico per il Climaterio","Climaterio","Ricetta Tradizionale per il Climaterio","12 min",
+          ["500 ml di vino bianco o aceto di mele","2 cucchiai di salvia secca","2 cucchiai di iperico secco","1 scorza di arancia"],
+          ["Metti la salvia, l'iperico e la scorza di arancia in un barattolo di vetro.","Copri con il vino o l'aceto e chiudi bene il coperchio.","Lascia macerare per 10 giorni in un luogo fresco, agitando il barattolo ogni giorno.","Filtra in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in un bicchiere d'acqua, 1 volta al giorno."),
+        R("Tisana di Carqueja per il Drenaggio Linfatico","Drenaggio Linfatico","Infuso di Carqueja per Favorire il Drenaggio","10 min",
+          ["500 ml di acqua","2 cucchiai di carqueja secca","Succo di mezzo limone"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi la carqueja, copri e lascia in infusione per 10 minuti.","Filtra e aggiungi il succo di limone."],
+          "Bevi 1 tazza al mattino, a digiuno."),
+        R("Infuso di Malva e Salvia per l'Equilibrio Ormonale","Equilibrio Ormonale","Tisana di Malva e Salvia per il Benessere Femminile","10 min",
+          ["500 ml di acqua","1 cucchiaio di foglie di malva secche","1 cucchiaio di salvia secca"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi la malva e la salvia, copri e lascia in infusione per 10 minuti.","Filtra in una tazza."],
+          "Bevi 1 tazza nel tardo pomeriggio."),
+        R("Tisana di Ginepro e Foglie di Ulivo per la Ritenzione Idrica","Ritenzione Idrica","Infuso per la Ritenzione Idrica nel Climaterio","10 min",
+          ["500 ml di acqua","1 cucchiaino di bacche di ginepro schiacciate","1 cucchiaio di foglie di ulivo secche"],
+          ["Porta l'acqua a bollore con il ginepro e le foglie di ulivo per 5 minuti.","Togli dal fuoco, copri e lascia riposare per 5 minuti.","Filtra in una tazza."],
+          "Bevi 1 tazza a fine mattina.")
+      ] },
+    { id:"digestao", num:"06", icon:"leaf", title:"Digestione, Stomaco e Intestino", featured:"20+",
+      desc:"Sollievo naturale per bruciore di stomaco, reflusso, stitichezza ed emorroidi.",
+      items:[
+        R("Tisana per Bruciore di Stomaco e Reflusso","Bruciore e Reflusso","Infuso di Camomilla e Finocchio per il Bruciore di Stomaco","10 min",
+          ["500 ml di acqua","1 cucchiaio di fiori di camomilla","1 cucchiaio di semi di finocchio"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi la camomilla e il finocchio, copri e lascia in infusione per 8 minuti.","Filtra in una tazza."],
+          "Bevi tiepido, 20 minuti dopo i pasti principali."),
+        R("Ricetta per l'Intestino Pigro","Intestino Pigro","Ricetta di Prugna e Senna per l'Intestino Pigro","15 min",
+          ["500 ml di acqua","5 prugne secche","1 cucchiaio di foglie di senna","1 scorza di arancia"],
+          ["Porta l'acqua a bollore con le prugne e la scorza di arancia per 5 minuti.","Togli dal fuoco, aggiungi la senna, copri e lascia riposare per 10 minuti.","Filtra in un barattolo e conserva in frigorifero fino a 3 giorni."],
+          "Prendi 1 piccolo bicchiere (100 ml) prima di coricarti, solo quando necessario."),
+        R("Infuso per le Emorroidi","Emorroidi","Tisana di Amamelide per le Emorroidi","12 min",
+          ["500 ml di acqua","2 cucchiai di amamelide secca","1 cucchiaio di fiori di calendula"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi l'amamelide e la calendula, copri e lascia in infusione per 10 minuti.","Filtra e lascia raffreddare fino a renderlo tiepido o freddo."],
+          "Usa per bagni di seduta tiepidi di 10 minuti, oppure bevi 1 tazza al giorno."),
+        R("Tisana Digestiva Dopo i Pasti","Digestione","Infuso di Menta e Zenzero per Dopo i Pasti","8 min",
+          ["500 ml di acqua","1 cucchiaio di foglie di menta","1 cucchiaino di zenzero grattugiato"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi la menta e lo zenzero, copri e lascia in infusione per 5 minuti.","Filtra in una tazza."],
+          "Bevi tiepido subito dopo i pasti principali."),
+        R("Tisana di Puleggio per la Digestione","Digestione","Il Classico Infuso Portoghese di Puleggio Dopo i Pasti","8 min",
+          ["500 ml di acqua","2 cucchiai di puleggio secco"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi il puleggio, copri e lascia in infusione per 8 minuti.","Filtra in una tazza."],
+          "Bevi tiepido, subito dopo i pasti principali."),
+        R("Ricetta di Carqueja per il Fegato e la Digestione","Fegato","Ricetta dell'Alentejo per il Fegato e la Digestione","12 min",
+          ["750 ml di vino bianco o acquavite","3 cucchiai di carqueja secca","1 scorza di arancia"],
+          ["Metti la carqueja e la scorza di arancia in un barattolo di vetro.","Copri con il vino o l'acquavite e chiudi bene il coperchio.","Lascia macerare per 15 giorni in un luogo fresco, agitando il barattolo ogni 2 giorni.","Filtra in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in acqua, prima di pranzo."),
+        R("Tisana di Malva per l'Intestino","Intestino","Infuso Delicato di Malva per l'Intestino","8 min",
+          ["500 ml di acqua","2 cucchiai di foglie di malva secche","1 cucchiaino di miele"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi la malva, copri e lascia in infusione per 8 minuti.","Filtra in una tazza e dolcifica con il miele."],
+          "Bevi 1 tazza alla sera, prima di coricarti."),
+        R("Infuso di Iperico per lo Stomaco","Stomaco","Tisana di Iperico per il Disagio Gastrico","8 min",
+          ["500 ml di acqua","1 cucchiaio di iperico secco"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi l'iperico, copri e lascia in infusione per 8 minuti.","Filtra in una tazza."],
+          "Bevi 1 tazza dopo i pasti principali."),
+        R("Tisana di Rosmarino e Puleggio per il Gonfiore","Gonfiore","Infuso Tradizionale per il Disagio da Gonfiore","8 min",
+          ["500 ml di acqua","1 cucchiaino di rosmarino secco","1 cucchiaio di puleggio secco"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi il rosmarino e il puleggio, copri e lascia in infusione per 8 minuti.","Filtra in una tazza."],
+          "Bevi tiepido dopo i pasti.")
+      ] },
+    { id:"sono", num:"07", icon:"moon", title:"Sonno, Umore e Sistema Nervoso", featured:"40+",
+      desc:"Tisane e formule per ansia, stress, insonnia ed emicrania.",
+      items:[
+        R("Tisana di Camomilla","Calmante Delicato","Infuso Delicato di Camomilla per Rilassarsi","7 min",
+          ["1 cucchiaino di fiori di camomilla secchi","1 tazza di acqua bollente","Miele a piacere (facoltativo)"],
+          ["Metti i fiori di camomilla in una tazza.","Versa l'acqua bollente sui fiori e lascia in infusione per 5-10 minuti.","Aggiungi miele a piacere, se lo desideri.","Filtra la tisana in una tazza pulita.","Servi calda e goditi gli effetti calmanti della camomilla."],
+          "Bevi tiepida, 1 tazza al pomeriggio o prima di dormire, nei momenti di maggiore tensione."),
+        R("Tisana di Lavanda","Relax","Aroma Rilassante di Lavanda per Calmare la Mente","7 min",
+          ["1 cucchiaino di fiori di lavanda secchi","1 tazza di acqua bollente","Miele a piacere (facoltativo)"],
+          ["Metti i fiori di lavanda in una tazza.","Versa l'acqua bollente sui fiori e lascia in infusione per 5-10 minuti.","Aggiungi miele a piacere, se lo desideri.","Filtra la tisana in una tazza pulita.","Servi calda e goditi l'aroma rilassante della lavanda."],
+          "Bevi tiepida, 1 tazza alla sera, in una routine tranquilla prima di coricarti."),
+        R("Tisana di Menta Piperita","Sollievo dallo Stress","Infuso Rinfrescante di Menta Piperita contro lo Stress","8 min",
+          ["1 cucchiaino di foglie di menta piperita secche (o alcune foglie fresche)","1 tazza di acqua bollente","Miele a piacere (facoltativo)"],
+          ["Metti le foglie di menta piperita in una tazza.","Versa l'acqua bollente sulle foglie e lascia in infusione per 5-10 minuti.","Aggiungi miele a piacere, se lo desideri.","Filtra la tisana in una tazza pulita.","Servi calda e goditi gli effetti rinfrescanti della menta piperita."],
+          "Bevi tiepida, 1 tazza dopo i momenti di maggiore tensione durante il giorno."),
+        R("Tisana di Melissa e Basilico Sacro (Tulsi)","Ansia","Combinazione Calmante di Melissa e Tulsi per l'Ansia","9 min",
+          ["1 cucchiaino di foglie secche di melissa","1 cucchiaino di foglie secche di basilico sacro (tulsi)","1 tazza di acqua bollente","Miele a piacere (facoltativo)"],
+          ["Metti le foglie di melissa e di basilico sacro in una tazza.","Versa l'acqua bollente sulle foglie e lascia in infusione per 5-10 minuti.","Aggiungi miele a piacere, se lo desideri.","Filtra la tisana in una tazza pulita.","Servi calda e goditi la combinazione rilassante di queste erbe."],
+          "Bevi tiepida, 1-2 tazze al giorno, nei momenti di maggiore ansia."),
+        R("Tisana di Valeriana","Sonno e Ansia","Radice di Valeriana per Calmare e Preparare al Sonno","12 min",
+          ["1 cucchiaino di radice di valeriana secca","1 tazza di acqua bollente","Miele a piacere (facoltativo)"],
+          ["Metti la radice di valeriana in una tazza.","Versa l'acqua bollente sulla radice e lascia in infusione per 10-15 minuti.","Aggiungi miele a piacere, se lo desideri.","Filtra la tisana in una tazza pulita.","Servi calda e goditi gli effetti rilassanti della valeriana."],
+          "Bevi tiepida circa 30 minuti prima di coricarti."),
+        R("Tisana di Passiflora (Maracujá)","Calmante","Infuso di Passiflora per Calmare il Sistema Nervoso","8 min",
+          ["1 cucchiaino di foglie secche di passiflora (maracujá)","1 tazza di acqua bollente","Miele a piacere (facoltativo)"],
+          ["Metti le foglie di passiflora in una tazza.","Versa l'acqua bollente sulle foglie e lascia in infusione per 5-10 minuti.","Aggiungi miele a piacere, se lo desideri.","Filtra la tisana in una tazza pulita.","Servi calda e goditi gli effetti calmanti della passiflora."],
+          "Bevi tiepida, 1 tazza al pomeriggio o alla sera, secondo necessità."),
+        R("Tisana di Melissa e Zenzero","Stress","Tisana Rivitalizzante di Melissa e Zenzero contro lo Stress","9 min",
+          ["1 cucchiaino di foglie secche di melissa","1 cucchiaino di zenzero fresco grattugiato","1 tazza di acqua bollente","Miele a piacere (facoltativo)"],
+          ["Metti la melissa e lo zenzero grattugiato in una tazza.","Versa l'acqua bollente sulle erbe e lo zenzero e lascia in infusione per 5-10 minuti.","Aggiungi miele a piacere, se lo desideri.","Filtra la tisana in una tazza pulita.","Servi calda e goditi il sapore rivitalizzante di questa tisana."],
+          "Bevi tiepida, 1 tazza al mattino o a inizio pomeriggio."),
+        R("Tisana di Melissa ed Erba di San Giovanni","Umore","Combinazione Calmante per Equilibrare l'Umore","9 min",
+          ["1 cucchiaino di foglie secche di melissa","1 cucchiaino di foglie secche di erba di San Giovanni","1 tazza di acqua bollente","Miele a piacere (facoltativo)"],
+          ["Metti la melissa e l'erba di San Giovanni in una tazza.","Versa l'acqua bollente sulle erbe e lascia in infusione per 5-10 minuti.","Aggiungi miele a piacere, se lo desideri.","Filtra la tisana in una tazza pulita.","Servi calda e goditi gli effetti calmanti di queste erbe."],
+          "Bevi tiepida, 1 tazza nel tardo pomeriggio."),
+        R("Tisana di Luppolo e Camomilla","Relax Profondo","Combinazione di Luppolo e Camomilla per Rilassarsi Profondamente","8 min",
+          ["1 cucchiaino di fiori di camomilla secchi","1 cucchiaino di coni di luppolo secchi","1 tazza di acqua bollente","Miele a piacere (facoltativo)"],
+          ["Metti i fiori di camomilla e i coni di luppolo in una tazza.","Versa l'acqua bollente sulle erbe e lascia in infusione per 5-10 minuti.","Aggiungi miele a piacere, se lo desideri.","Filtra la tisana in una tazza pulita.","Servi calda e goditi la combinazione rilassante di camomilla e luppolo."],
+          "Bevi tiepida circa 30-40 minuti prima di coricarti."),
+        R("Tisana di Passiflora e Valeriana","Ansia Intensa","Combinazione Potente di Passiflora e Valeriana per l'Ansia","13 min",
+          ["1 cucchiaino di foglie secche di passiflora (maracujá)","1 cucchiaino di radice di valeriana secca","1 tazza di acqua bollente","Miele a piacere (facoltativo)"],
+          ["Metti la passiflora e la radice di valeriana in una tazza.","Versa l'acqua bollente sulle erbe e lascia in infusione per 5-10 minuti.","Aggiungi miele a piacere, se lo desideri.","Filtra la tisana in una tazza pulita.","Servi calda e goditi la combinazione calmante di passiflora e valeriana."],
+          "Bevi tiepida nei momenti di maggiore ansia o 30 minuti prima di coricarti."),
+        R("Tisana di Fiori d'Arancio","Tranquillità","Infuso Floreale di Fiori d'Arancio per Momenti di Tranquillità","7 min",
+          ["1 cucchiaino di fiori d'arancio secchi","1 tazza di acqua bollente","Miele a piacere (facoltativo)"],
+          ["Metti i fiori d'arancio in una tazza.","Versa l'acqua bollente sui fiori e lascia in infusione per 5-10 minuti.","Aggiungi miele a piacere, se lo desideri.","Filtra la tisana in una tazza pulita.","Servi calda e goditi gli effetti rilassanti dei fiori d'arancio."],
+          "Bevi tiepida, 1 tazza al pomeriggio, in un momento di pausa."),
+        R("Tisana di Cedrina","Sollievo Mentale","Aroma Agrumato di Cedrina per Alleviare la Mente","8 min",
+          ["1 cucchiaino di foglie secche di cedrina","1 tazza di acqua bollente","Miele a piacere (facoltativo)"],
+          ["Metti le foglie di cedrina in una tazza.","Versa l'acqua bollente sulle foglie e lascia in infusione per 5-10 minuti.","Aggiungi miele a piacere, se lo desideri.","Filtra la tisana in una tazza pulita.","Servi calda e goditi l'aroma agrumato e calmante della cedrina."],
+          "Bevi tiepida, 1 tazza al mattino o a fine giornata."),
+        R("Infuso per l'Emicrania","Emicrania","Tisana di Zenzero e Menta Piperita per l'Emicrania","10 min",
+          ["500 ml di acqua","1 cucchiaino di zenzero grattugiato","1 cucchiaio di menta piperita"],
+          ["Porta l'acqua a bollore con lo zenzero per 5 minuti.","Togli dal fuoco, aggiungi la menta piperita, copri e lascia riposare per 5 minuti.","Filtra in una tazza."],
+          "Bevi ai primi segnali di mal di testa, a piccoli sorsi."),
+        R("Tisana di Lavanda per Dormire","Insonnia","Il Tradizionale Infuso Portoghese di Lavanda per Dormire","8 min",
+          ["500 ml di acqua","1 cucchiaio di fiori di lavanda secchi","1 cucchiaino di miele"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi la lavanda, copri e lascia in infusione per 8 minuti.","Filtra in una tazza e dolcifica con il miele."],
+          "Bevi tiepida, 30 minuti prima di coricarti."),
+        R("Ricetta di Iperico per l'Umore","Umore","Ricetta Conventuale di Iperico per il Benessere","10 min",
+          ["500 ml di vino bianco o aceto di mele","3 cucchiai di iperico secco","1 scorza di arancia"],
+          ["Metti l'iperico e la scorza di arancia in un barattolo di vetro.","Copri con il vino o l'aceto e chiudi bene il coperchio.","Lascia macerare per 10 giorni in un luogo fresco, agitando il barattolo ogni giorno.","Filtra in un barattolo pulito."],
+          "Prendi 1 cucchiaio diluito in un bicchiere d'acqua, 1 volta al giorno."),
+        R("Tisana di Malva e Lavanda per Calmare","Ansia","Infuso Delicato di Malva e Lavanda","8 min",
+          ["500 ml di acqua","1 cucchiaio di foglie di malva secche","1 cucchiaio di fiori di lavanda secchi"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi la malva e la lavanda, copri e lascia in infusione per 8 minuti.","Filtra in una tazza."],
+          "Bevi 1 tazza al pomeriggio o alla sera."),
+        R("Infuso Conventuale di Lavanda e Salvia per il Sonno","Sonno Profondo","Ricetta di Tradizione Conventuale per Notti Tranquille","9 min",
+          ["500 ml di acqua","1 cucchiaio di fiori di lavanda secchi","1 cucchiaino di salvia secca"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi la lavanda e la salvia, copri e lascia in infusione per 9 minuti.","Filtra in una tazza."],
+          "Bevi tiepida, 30-40 minuti prima di coricarti."),
+        R("Tisana di Ginepro e Lavanda per Rilassarsi","Relax","Infuso Tradizionale per Rilassarsi a Fine Giornata","9 min",
+          ["500 ml di acqua","1 cucchiaino di bacche di ginepro schiacciate","1 cucchiaio di fiori di lavanda secchi"],
+          ["Porta l'acqua a bollore con il ginepro per 3 minuti.","Togli dal fuoco, aggiungi la lavanda, copri e lascia riposare per 6 minuti.","Filtra in una tazza."],
+          "Bevi 1 tazza nel tardo pomeriggio.")
+      ] },
+    { id:"respiracao", num:"08", icon:"lungs", title:"Respirazione e Infezioni", featured:"25+",
+      desc:"Ricette per influenza, asma, allergie, sinusite e caduta dei capelli.",
+      items:[
+        R("Sciroppo Casalingo per l'Influenza","Influenza","Sciroppo di Limone e Miele per l'Influenza","15 min",
+          ["2 limoni (succo e scorza)","4 cucchiai di miele grezzo","1 cucchiaino di zenzero grattugiato","1 stecca di cannella"],
+          ["In una pentola piccola, scalda il succo e la scorza di limone con lo zenzero e la cannella a fuoco basso.","Lascia ridurre per circa 10 minuti, senza bollire, e togli dal fuoco.","Lascia intiepidire, togli la cannella e mescola il miele finché si scioglie."],
+          "Prendi 1 cucchiaio ogni 4 ore, ai primi segnali di raffreddore."),
+        R("Tisana per la Sinusite","Sinusite","Vapore e Tisana di Eucalipto per la Sinusite","10 min",
+          ["500 ml di acqua","2 cucchiai di foglie di eucalipto","Succo di mezzo limone"],
+          ["Porta l'acqua a bollore con l'eucalipto per 5 minuti.","Metti da parte metà per inalare il vapore, coprendo la testa con un asciugamano.","Filtra l'altra metà, lascia intiepidire e aggiungi il succo di limone per berla."],
+          "Inala il vapore per 5 minuti e bevi 1 tazza della tisana, 2 volte al giorno."),
+        R("Infuso per le Allergie","Allergie","Tisana di Ortica per le Allergie Stagionali","12 min",
+          ["500 ml di acqua","2 cucchiai di ortica secca","1 cucchiaino di miele"],
+          ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi l'ortica, copri e lascia in infusione per 10 minuti.","Filtra in una tazza e dolcifica con il miele."],
+          "Bevi 1-2 tazze al giorno, nel periodo di maggiore sensibilità."),
+        R("Tonico Capillare Anticaduta","Caduta dei Capelli","Tonico al Rosmarino per Fermare la Caduta dei Capelli","12 min",
+          ["500 ml di acqua","4 cucchiai di rosmarino fresco","1 cucchiaio di aceto di mele"],
+          ["Porta l'acqua a bollore con il rosmarino per 8 minuti.","Togli dal fuoco, copri e lascia raffreddare completamente.","Filtra in un barattolo e aggiungi l'aceto di mele."],
+          "Applica sul cuoio capelluto dopo il lavaggio, senza risciacquare, 3 volte a settimana."),
+        R("Suffumigio di Erbe per l'Asma","Asma","Vapore di Eucalipto e Timo per Respirare Meglio","10 min",
+          ["1 litro di acqua","2 cucchiai di foglie di eucalipto","1 cucchiaio di timo secco"],
+          ["Porta l'acqua a bollore con l'eucalipto e il timo per 3 minuti.","Togli dal fuoco e metti la pentola su una superficie sicura.","Chinati sul vapore, coprendo la testa con un asciugamano, mantenendo una distanza di sicurezza dal calore."],
+          "Inala il vapore per 5-8 minuti, 1 volta al giorno. Sospendi in caso di disagio."),
+        R("Sciroppo di Malva per la Tosse","Tosse","Sciroppo Conventuale di Malva per la Tosse","18 min",
+          ["500 ml di acqua","4 cucchiai di foglie di malva secche","100 g di miele"],
+          ["Porta l'acqua a bollore con la malva per 10 minuti.","Togli dal fuoco, copri e lascia riposare per 5 minuti.","Filtra e, ancora tiepido, aggiungi il miele, mescolando finché si scioglie completamente."],
+          "Prendi 1 cucchiaio ogni 4 ore, ai primi segnali di tosse."),
+        R("Tisana di Ginepro per la Bronchite","Bronchite","Infuso Tradizionale di Ginepro per le Vie Respiratorie","10 min",
+          ["500 ml di acqua","1 cucchiaio di bacche di ginepro schiacciate","1 cucchiaino di miele"],
+          ["Porta l'acqua a bollore con il ginepro per 5 minuti.","Togli dal fuoco, copri e lascia riposare per 5 minuti.","Filtra in una tazza e dolcifica con il miele."],
+          "Bevi 2 tazze al giorno, nei giorni di maggiore disagio."),
+        R("Suffumigio di Carqueja per la Congestione","Congestione","Vapore Tradizionale di Carqueja per Decongestionare","10 min",
+          ["1 litro di acqua","3 cucchiai di carqueja secca"],
+          ["Porta l'acqua a bollore con la carqueja per 5 minuti.","Togli dal fuoco e metti la pentola su una superficie sicura.","Chinati sul vapore, coprendo la testa con un asciugamano, mantenendo una distanza di sicurezza dal calore."],
+          "Inala il vapore per 5-8 minuti, 1 volta al giorno."),
+        R("Ricetta di Rosmarino per le Difese dell'Organismo","Difese","Ricetta Tradizionale di Rosmarino per le Difese","12 min",
+          ["750 ml di vino bianco o acquavite","4 cucchiai di rosmarino fresco","1 scorza di limone","50 g di miele"],
+          ["Metti il rosmarino e la scorza di limone in un barattolo di vetro.","Copri con il vino o l'acquavite e chiudi bene il coperchio.","Lascia macerare per 15 giorni in un luogo fresco, agitando il barattolo ogni 2 giorni.","Filtra e aggiungi il miele, mescolando finché si scioglie."],
+          "Prendi 1 cucchiaio diluito in acqua, 1 volta al giorno."),
+        R("Tisana di Malva e Ginepro per il Mal di Gola","Mal di Gola","Infuso Calmante per la Gola Irritata","10 min",
+          ["500 ml di acqua","2 cucchiai di foglie di malva secche","1 cucchiaino di bacche di ginepro schiacciate","1 cucchiaino di miele"],
+          ["Porta l'acqua a bollore con la malva e il ginepro per 5 minuti.","Togli dal fuoco, copri e lascia riposare per 5 minuti.","Filtra in una tazza e dolcifica con il miele."],
+          "Fai gargarismi tiepidi 2 volte al giorno, oppure bevi 1 tazza.")
+      ] }
+  ];
+
+  var BONUS = { id:"bonus", num:"B", icon:"gift", title:"Bonus Esclusivi",
+    desc:"Sei guide extra incluse nel tuo piano completo, pronte da consultare.",
+    items:[
+      R("Mounjaro Caseiro","Metabolismo","Tisana di Cannella e Aceto di Mele per il Metabolismo","5 min",
+        ["300 ml di acqua tiepida","1 cucchiaio di aceto di mele","1 cucchiaino di cannella in polvere","Succo di mezzo limone"],
+        ["In una tazza, mescola l'acqua tiepida con l'aceto di mele.","Aggiungi la cannella in polvere e il succo di limone e mescola bene.","Bevi subito dopo la preparazione, mentre è ancora tiepida."],
+        "Bevi al mattino, prima della colazione."),
+      R("Farmacia Naturale in Casa","Orto Medicinale","Guida per Coltivare Erbe Medicinali in Vaso","20 min",
+        ["3-5 vasi con fori di drenaggio","Terriccio e compost organico","Semi o piantine di menta, camomilla e rosmarino","Piccolo annaffiatoio"],
+        ["Riempi i vasi fino a 2 cm dal bordo con terriccio mescolato a compost organico.","Pianta un'erba per vaso, coprendo leggermente le radici o i semi.","Annaffia subito e posiziona in un luogo con luce solare indiretta."],
+        "Annaffia 2-3 volte a settimana e raccogli le foglie secondo necessità."),
+      R("Pomate e Balsami Ancestrali","Dolori Articolari","Balsamo di Olio e Erbe per i Dolori Articolari","35 min",
+        ["100 ml di olio extravergine di oliva","3 cucchiai di fiori di calendula secchi","1 cucchiaio di cera d'api"],
+        ["Scalda l'olio a bagnomaria e aggiungi la calendula, lasciando in infusione per 30 minuti a fuoco molto basso.","Filtra l'olio per rimuovere i fiori.","Riscalda di nuovo l'olio filtrato, aggiungi la cera d'api e mescola finché si scioglie completamente."],
+        "Lascia raffreddare in un barattolo e applica sulle articolazioni doloranti, 1-2 volte al giorno."),
+      R("Guida al Sonno Rigenerante","Sonno","Infuso Notturno di Lavanda e Camomilla","12 min",
+        ["500 ml di acqua","1 cucchiaio di fiori di lavanda","1 cucchiaio di fiori di camomilla","1 cucchiaino di miele"],
+        ["Porta l'acqua a bollore e togli dal fuoco.","Aggiungi la lavanda e la camomilla, copri e lascia in infusione per 10 minuti.","Filtra in una tazza e dolcifica con il miele."],
+        "Bevi 30-40 minuti prima di coricarti, in una routine tranquilla senza schermi."),
+      R("Rimedi Naturali in Gocce","Ricetta","Ricetta Casalinga di Propoli ed Erbe in Gocce","10 min",
+        ["200 ml di alcol alimentare o vodka","3 cucchiai di propoli grezza tritata","1 flacone di vetro scuro con contagocce"],
+        ["Metti la propoli tritata nel barattolo di vetro e copri con l'alcol.","Chiudi bene e agita il barattolo ogni giorno per 15 giorni.","Filtra nel flacone con contagocce, conservando in un luogo fresco e buio."],
+        "Diluisci 10-15 gocce in un bicchiere d'acqua, fino a 2 volte al giorno."),
+      R("Fegato Leggero e Sgonfio","Fegato","Tisana di Tarassaco e Boldo per il Fegato","12 min",
+        ["500 ml di acqua","1 cucchiaio di foglie di tarassaco secche","1 cucchiaino di boldo secco","Succo di mezzo limone"],
+        ["Porta l'acqua a bollore con il tarassaco e il boldo per 5 minuti.","Togli dal fuoco, copri e lascia in infusione per 10 minuti.","Filtra e aggiungi il succo di limone."],
+        "Bevi 1 tazza prima di pranzo, in cicli di 2 settimane con 1 settimana di pausa.")
+    ] };
+
+  var ALL_GROUPS = CATEGORIES.concat([BONUS]);
+
+  var ALL_ITEMS = [];
+  ALL_GROUPS.forEach(function(cat){
+    cat.items.forEach(function(recipe, i){
+      ALL_ITEMS.push({
+        id: cat.id + "-" + i,
+        number: ALL_ITEMS.length + 1,
+        title: recipe.title,
+        tag: recipe.tag,
+        subtitle: recipe.subtitle,
+        time: recipe.time,
+        ingredients: recipe.ingredients,
+        steps: recipe.steps,
+        tomar: recipe.tomar,
+        catId: cat.id,
+        catTitle: cat.title,
+        icon: cat.icon
+      });
+    });
+  });
+
+  var POPULAR_PICKS = [
+    { itemId:"coluna-1", hook:"Sollievo Rapido per il Nervo Sciatico" },
+    { itemId:"digestao-3", hook:"Sgonfiare la Pancia in 48h" },
+    { itemId:"bonus-3", hook:"Tisana Rigenerante per il Sonno" },
+    { itemId:"pressao-1", hook:"Gambe Leggere e Sgonfie" },
+    { itemId:"pressao-0", hook:"Equilibrio Naturale della Pressione Arteriosa" }
+  ];
+
+  var favorites = [];
+  try{
+    var raw = localStorage.getItem("mezinhas_favoritos");
+    if(raw) favorites = JSON.parse(raw);
+  }catch(e){ favorites = []; }
+
+  function saveFavorites(){
+    try{ localStorage.setItem("mezinhas_favoritos", JSON.stringify(favorites)); }catch(e){}
+  }
+  function isFav(id){ return favorites.indexOf(id) !== -1; }
+  function toggleFav(id){
+    var idx = favorites.indexOf(id);
+    if(idx === -1) favorites.push(id); else favorites.splice(idx,1);
+    saveFavorites();
+    renderFavCount();
+  }
+
+  var els = {
+    sidebar: document.getElementById("sidebar"),
+    scrim: document.getElementById("scrim"),
+    hamburgerBtn: document.getElementById("hamburgerBtn"),
+    navCategories: document.getElementById("navCategories"),
+    catGrid: document.getElementById("catGrid"),
+    bonusGridHome: document.getElementById("bonusGridHome"),
+    viewHome: document.getElementById("view-home"),
+    viewCategory: document.getElementById("view-category"),
+    viewFavorites: document.getElementById("view-favorites"),
+    catHeaderIcon: document.getElementById("catHeaderIcon"),
+    catHeaderTitle: document.getElementById("catHeaderTitle"),
+    catHeaderDesc: document.getElementById("catHeaderDesc"),
+    catItemGrid: document.getElementById("catItemGrid"),
+    backBtn: document.getElementById("backBtn"),
+    favGrid: document.getElementById("favGrid"),
+    favEmpty: document.getElementById("favEmpty"),
+    favSubcount: document.getElementById("favSubcount"),
+    favCount: document.getElementById("favCount"),
+    content: document.getElementById("content"),
+    searchInput: document.getElementById("searchInput"),
+    searchPanel: document.getElementById("searchPanel"),
+    modalBackdrop: document.getElementById("modalBackdrop"),
+    modalBadge: document.getElementById("modalBadge"),
+    modalTitle: document.getElementById("modalTitle"),
+    modalSubtitle: document.getElementById("modalSubtitle"),
+    modalIngredients: document.getElementById("modalIngredients"),
+    modalSteps: document.getElementById("modalSteps"),
+    modalTomar: document.getElementById("modalTomar"),
+    modalTime: document.getElementById("modalTime"),
+    modalCloseBtn: document.getElementById("modalCloseBtn"),
+    modalFavBtn: document.getElementById("modalFavBtn"),
+    modalFavLabel: document.getElementById("modalFavLabel"),
+    accordionToggle: document.getElementById("accordionToggle"),
+    popularTrack: document.getElementById("popularTrack"),
+    popularDots: document.getElementById("popularDots")
+  };
+
+  function itemCardHtml(item){
+    return '<div class="item-card">' +
+      '<button class="fav-btn" data-favid="'+item.id+'" aria-pressed="'+isFav(item.id)+'" aria-label="Salva nei preferiti">' +
+        '<svg viewBox="0 0 24 24" fill="'+(isFav(item.id)?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-8.9C1 7.8 2.6 5 5.6 5c1.8 0 3.2 1 4.4 2.6C11.2 6 12.6 5 14.4 5c3 0 4.6 2.8 3.1 6.1C15 15.6 12 20 12 20Z"/></svg>' +
+      '</button>' +
+      '<span class="tag">'+item.tag+'</span>' +
+      '<h3>'+item.title+'</h3>' +
+      '<div class="item-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Ricetta n. '+item.number+' · '+item.time+'</div>' +
+      '<div class="item-row"><button class="view-btn" data-itemid="'+item.id+'">Vedi ricetta</button></div>' +
+    '</div>';
+  }
+
+  function renderNavCategories(){
+    els.navCategories.innerHTML = CATEGORIES.map(function(cat){
+      return '<button class="nav-item" data-nav="cat" data-catid="'+cat.id+'">' +
+        '<span class="num">'+cat.num+'</span>' + svg(cat.icon) +
+        '<span>'+cat.title+'</span>' +
+      '</button>';
+    }).join("");
+  }
+
+  function renderPopular(){
+    els.popularTrack.innerHTML = POPULAR_PICKS.map(function(pick, i){
+      var item = ALL_ITEMS.filter(function(it){ return it.id === pick.itemId; })[0];
+      if(!item) return "";
+      return '<div class="carousel-slide"><button class="popular-card" data-itemid="'+item.id+'">' +
+        '<span class="popular-rank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>N. '+(i+1)+' questa settimana</span>' +
+        '<h4>'+pick.hook+'</h4>' +
+        '<span class="p-cat">'+item.catTitle+'</span>' +
+      '</button></div>';
+    }).join("");
+    initCarousel(els.popularTrack, els.popularDots, POPULAR_PICKS.length);
+  }
+
+  function initCarousel(trackEl, dotsEl, count, intervalMs){
+    if(count <= 0) return;
+    intervalMs = intervalMs || 2500;
+    var index = 0, timer = null, dragging = false, startX = 0, pointerId = null;
+
+    function renderDots(){
+      var frag = [];
+      for(var i=0;i<count;i++){
+        frag.push('<button class="carousel-dot'+(i===0?' active':'')+'" data-i="'+i+'" aria-label="Vai alla slide '+(i+1)+'"></button>');
+      }
+      dotsEl.innerHTML = count > 1 ? frag.join("") : "";
+    }
+    function update(animate){
+      trackEl.style.transition = animate === false ? "none" : "";
+      trackEl.style.transform = "translateX(-"+(index*100)+"%)";
+      dotsEl.querySelectorAll(".carousel-dot").forEach(function(d,i){ d.classList.toggle("active", i===index); });
+    }
+    function goTo(i){ index = ((i % count) + count) % count; update(); }
+    function start(){ stop(); if(count > 1) timer = setInterval(function(){ goTo(index+1); }, intervalMs); }
+    function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+
+    dotsEl.addEventListener("click", function(e){
+      var d = e.target.closest(".carousel-dot");
+      if(!d) return;
+      goTo(parseInt(d.dataset.i,10));
+      start();
+    });
+
+    trackEl.addEventListener("pointerdown", function(e){
+      if(count <= 1) return;
+      dragging = true; startX = e.clientX; pointerId = e.pointerId;
+      trackEl.classList.add("dragging");
+      trackEl.setPointerCapture(pointerId);
+      stop();
+    });
+    trackEl.addEventListener("pointermove", function(e){
+      if(!dragging) return;
+      var dx = e.clientX - startX;
+      trackEl.style.transition = "none";
+      trackEl.style.transform = "translateX(calc(-"+(index*100)+"% + "+dx+"px))";
+    });
+    function endDrag(e){
+      if(!dragging) return;
+      dragging = false;
+      trackEl.classList.remove("dragging");
+      var dx = e.clientX - startX;
+      var width = trackEl.getBoundingClientRect().width || 1;
+      if(Math.abs(dx) > width * 0.18){ goTo(dx < 0 ? index+1 : index-1); }
+      else { update(); }
+      start();
+    }
+    trackEl.addEventListener("pointerup", endDrag);
+    trackEl.addEventListener("pointercancel", endDrag);
+
+    renderDots();
+    update(false);
+    start();
+  }
+
+  function renderHome(){
+    els.catGrid.innerHTML = CATEGORIES.map(function(cat){
+      return '<button class="cat-card" data-catid="'+cat.id+'">' +
+        '<div class="top-row"><div class="cat-icon">'+svg(cat.icon)+'</div><span class="cat-num">'+cat.num+'</span></div>' +
+        '<h3>'+cat.title+'</h3>' +
+        '<p>'+cat.desc+'</p>' +
+        '<span class="count-row">'+cat.featured+' ricette</span>' +
+      '</button>';
+    }).join("");
+
+    els.bonusGridHome.innerHTML = BONUS.items.map(function(recipe, i){
+      return '<button class="bonus-card" data-itemid="'+BONUS.id+'-'+i+'">' +
+        '<div class="cat-icon">'+svg("gift")+'</div>' +
+        '<div><h4>'+recipe.title+'</h4><p>'+recipe.subtitle+'</p></div>' +
+      '</button>';
+    }).join("");
+  }
+
+  function renderGroupDetail(group){
+    els.catHeaderIcon.innerHTML = svg(group.icon);
+    els.catHeaderTitle.textContent = group.title;
+    els.catHeaderDesc.textContent = group.desc;
+    var noteEl = document.getElementById("catHeaderNote");
+    if(group.featured){
+      if(!noteEl){
+        noteEl = document.createElement("p");
+        noteEl.id = "catHeaderNote";
+        noteEl.className = "cat-header-note";
+        els.catHeaderDesc.insertAdjacentElement("afterend", noteEl);
+      }
+      noteEl.textContent = "Sono mostrate le ricette in evidenza di questa categoria — le più forti e più usate dalla nostra community.";
+      noteEl.hidden = false;
+    } else if(noteEl){
+      noteEl.hidden = true;
+    }
+    var items = ALL_ITEMS.filter(function(it){ return it.catId === group.id; });
+    els.catItemGrid.innerHTML = items.map(itemCardHtml).join("");
+  }
+
+  function renderFavCount(){
+    els.favCount.textContent = favorites.length ? favorites.length : "";
+  }
+
+  function renderFavorites(){
+    var favItems = ALL_ITEMS.filter(function(it){ return isFav(it.id); });
+    els.favSubcount.textContent = favItems.length + (favItems.length === 1 ? " ricetta salvata" : " ricette salvate");
+    if(favItems.length === 0){
+      els.favGrid.hidden = true;
+      els.favEmpty.hidden = false;
+    } else {
+      els.favGrid.hidden = false;
+      els.favEmpty.hidden = true;
+      els.favGrid.innerHTML = favItems.map(itemCardHtml).join("");
+    }
+    renderFavCount();
+  }
+
+  function setActiveNav(kind, catId){
+    var navButtons = els.sidebar.querySelectorAll(".nav-item");
+    navButtons.forEach(function(btn){
+      var match = (kind === "cat" && btn.dataset.nav === "cat" && btn.dataset.catid === catId) ||
+                  (kind !== "cat" && btn.dataset.nav === kind);
+      btn.classList.toggle("active", !!match);
+    });
+  }
+
+  function showView(name){
+    els.viewHome.hidden = name !== "home";
+    els.viewCategory.hidden = name !== "category";
+    els.viewFavorites.hidden = name !== "favorites";
+    els.content.scrollTo({top:0, behavior:"instant"});
+    closeDrawer();
+  }
+
+  function openHome(){ showView("home"); setActiveNav("home"); }
+  function openFavorites(){ renderFavorites(); showView("favorites"); setActiveNav("favorites"); }
+  function openGroup(id){
+    var group = ALL_GROUPS.filter(function(g){ return g.id === id; })[0];
+    if(!group) return;
+    renderGroupDetail(group);
+    showView("category");
+    setActiveNav(id === "bonus" ? "bonus" : "cat", id);
+  }
+
+  function openDrawer(){
+    els.sidebar.classList.add("open");
+    els.scrim.classList.add("open");
+    els.hamburgerBtn.setAttribute("aria-expanded","true");
+  }
+  function closeDrawer(){
+    els.sidebar.classList.remove("open");
+    els.scrim.classList.remove("open");
+    els.hamburgerBtn.setAttribute("aria-expanded","false");
+  }
+
+  function openModal(itemId){
+    var item = ALL_ITEMS.filter(function(it){ return it.id === itemId; })[0];
+    if(!item) return;
+    els.modalBadge.textContent = "Ricetta Naturale #" + item.number;
+    els.modalTitle.textContent = item.title;
+    els.modalSubtitle.textContent = item.subtitle;
+    els.modalIngredients.innerHTML = item.ingredients.map(function(ing){ return "<li>"+ing+"</li>"; }).join("");
+    els.modalSteps.innerHTML = item.steps.map(function(step, i){
+      return '<li><span class="step-num">'+(i+1)+'</span><span>'+step+'</span></li>';
+    }).join("");
+    els.modalTomar.textContent = item.tomar;
+    els.modalTime.textContent = item.time;
+    els.modalFavBtn.dataset.favid = item.id;
+    updateModalFavBtn(item.id);
+    els.modalBackdrop.hidden = false;
+    els.modalBackdrop.scrollTop = 0;
+    var modalEl = els.modalBackdrop.querySelector(".modal");
+    if(modalEl) modalEl.scrollTop = 0;
+    els.modalCloseBtn.focus();
+  }
+  function updateModalFavBtn(id){
+    var pressed = isFav(id);
+    els.modalFavBtn.setAttribute("aria-pressed", pressed);
+    els.modalFavLabel.textContent = pressed ? "Salvato nei preferiti" : "Salva nei preferiti";
+  }
+  function closeModal(){ els.modalBackdrop.hidden = true; }
+
+  function refreshFavButtons(){
+    document.querySelectorAll(".fav-btn").forEach(function(btn){
+      var id = btn.dataset.favid;
+      var pressed = isFav(id);
+      btn.setAttribute("aria-pressed", pressed);
+      var s = btn.querySelector("svg");
+      if(s) s.setAttribute("fill", pressed ? "currentColor" : "none");
+    });
+  }
+
+  // ---- event delegation ----
+  document.body.addEventListener("click", function(e){
+    var favBtn = e.target.closest(".fav-btn");
+    if(favBtn){ toggleFav(favBtn.dataset.favid); refreshFavButtons(); if(!els.viewFavorites.hidden) renderFavorites(); return; }
+
+    var popularCard = e.target.closest(".popular-card");
+    if(popularCard && popularCard.dataset.itemid){ openModal(popularCard.dataset.itemid); return; }
+
+    var viewBtn = e.target.closest(".view-btn, .bonus-card");
+    if(viewBtn && viewBtn.dataset.itemid){ openModal(viewBtn.dataset.itemid); return; }
+
+    var catCard = e.target.closest(".cat-card");
+    if(catCard){ openGroup(catCard.dataset.catid); return; }
+
+    var navItem = e.target.closest(".nav-item");
+    if(navItem){
+      var kind = navItem.dataset.nav;
+      if(kind === "home") openHome();
+      else if(kind === "favorites") openFavorites();
+      else if(kind === "bonus") openGroup("bonus");
+      else if(kind === "cat") openGroup(navItem.dataset.catid);
+      return;
+    }
+  });
+
+  els.accordionToggle.addEventListener("click", function(){
+    var expanded = els.accordionToggle.getAttribute("aria-expanded") === "true";
+    els.accordionToggle.setAttribute("aria-expanded", String(!expanded));
+    els.navCategories.hidden = expanded;
+  });
+
+  els.backBtn.addEventListener("click", openHome);
+  els.hamburgerBtn.addEventListener("click", function(){
+    if(els.sidebar.classList.contains("open")) closeDrawer(); else openDrawer();
+  });
+  els.scrim.addEventListener("click", closeDrawer);
+  els.modalCloseBtn.addEventListener("click", closeModal);
+  els.modalBackdrop.addEventListener("click", function(e){ if(e.target === els.modalBackdrop) closeModal(); });
+  els.modalFavBtn.addEventListener("click", function(){
+    toggleFav(els.modalFavBtn.dataset.favid);
+    updateModalFavBtn(els.modalFavBtn.dataset.favid);
+    refreshFavButtons();
+    if(!els.viewFavorites.hidden) renderFavorites();
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape"){
+      if(!els.modalBackdrop.hidden) closeModal();
+      else if(els.sidebar.classList.contains("open")) closeDrawer();
+      else if(els.searchPanel && !els.searchPanel.hidden) hideSearchPanel();
+    }
+  });
+
+  // ---- search ----
+  function hideSearchPanel(){ els.searchPanel.hidden = true; els.searchPanel.innerHTML = ""; }
+  els.searchInput.addEventListener("input", function(){
+    var q = els.searchInput.value.trim().toLowerCase();
+    if(q.length < 2){ hideSearchPanel(); return; }
+    var matches = ALL_ITEMS.filter(function(it){
+      return it.title.toLowerCase().indexOf(q) !== -1 ||
+             it.tag.toLowerCase().indexOf(q) !== -1 ||
+             it.catTitle.toLowerCase().indexOf(q) !== -1;
+    }).slice(0,8);
+    if(matches.length === 0){
+      els.searchPanel.innerHTML = '<div class="search-empty">Nessun risultato per "'+els.searchInput.value.trim()+'".</div>';
+    } else {
+      els.searchPanel.innerHTML = matches.map(function(it){
+        return '<button data-itemid="'+it.id+'"><span class="r-title">'+it.title+'</span><span class="r-cat">'+it.catTitle+'</span></button>';
+      }).join("");
+    }
+    els.searchPanel.hidden = false;
+  });
+  els.searchPanel.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-itemid]");
+    if(btn){ openModal(btn.dataset.itemid); els.searchInput.value = ""; hideSearchPanel(); }
+  });
+  document.addEventListener("click", function(e){
+    if(!e.target.closest(".topbar-search")) hideSearchPanel();
+  });
+
+  renderNavCategories();
+  renderPopular();
+  renderHome();
+  renderFavCount();
+  openHome();
+})();
+</script>
