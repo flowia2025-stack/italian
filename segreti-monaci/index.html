@@ -62,6 +62,9 @@
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+  /* ===== Fix WebP: <picture> vira "transparente" no layout, preservando flex/grid/CSS que mirava o <img> direto ===== */
+  picture { display: contents; }
+
   /* ===== Otimizacao: fade suave no carregamento manual das imagens ===== */
 
   /* ===== BOTÃO CTA (halo pulsante + brilho + press down) ===== */
